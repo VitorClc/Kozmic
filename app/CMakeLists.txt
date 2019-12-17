@@ -13,3 +13,6 @@ add_executable(Kozmic main.cpp)
 ##### DEPENDENCIES CONFIG #####
 set(SDL_DEPS SDL2main SDL2 m user32 winmm imm32 ole32 oleaut32 version uuid advapi32 setupapi shell32 dinput8 dxerr8)
 CONFIG_DEPENDENCY(SDL2 "${SDL_DEPS}")
+
+set(GLEW_DEPS glew32 glu32 opengl32)
+CONFIG_DEPENDENCY(GLEW "${GLEW_DEPS}")
