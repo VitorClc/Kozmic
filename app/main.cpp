@@ -4,14 +4,18 @@
 #include <iostream>
 #include <SDL.h>
 #include <GL/glew.h>
+#include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
+#include <gtc/type_ptr.hpp>
 
 const GLchar *vertexShaderSource = "#version 330 core\n"
 "layout ( location = 0 ) in vec3 position;\n"
 "layout ( location = 1 ) in vec3 color;\n"
 "out vec3 ourColor;\n"
+"uniform mat4 transform;\n"
 "void main ( )\n"
 "{\n"
-"gl_Position = vec4( position, 1.0 );\n"
+"gl_Position = transform * vec4( position, 1.0 );\n"
 "ourColor = color;\n"
 "}";
 
@@ -82,20 +86,30 @@ int main(int argc, char const *argv[])
 
     GLfloat Vertices[] = {
         /// VERTICES            COLORS
-        -0.5f,-0.5f,0.0f,       0.0f, 0.0f, 1.0f,
-        0.5f, -0.5f, 0.0f,      0.0f, 1.0f, 0.0f,
-        0.0f,0.5f,0.0f,         1.0f, 0.0f, 0.0f
+        0.5f,  0.5f, 0.0f,       0.0f, 0.0f, 1.0f,
+        0.5f, -0.5f, 0.0f,       0.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f, 0.0f,      0.0f, 1.0f, 0.0f,
+        -0.5f,  0.5f, 0.0f,       0.0f, 1.0f, 0.0f
     };
 
-    GLuint VBO, VAO;
+    GLint Indices[] = {
+        0, 1, 3,
+        1, 2, 3
+    }; 
+
+    GLuint VBO, VAO, EBO;
 
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
 
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), Indices, GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid *) 0);
     glEnableVertexAttribArray(0);
@@ -108,9 +122,6 @@ int main(int argc, char const *argv[])
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    glUseProgram(shaderProgram);
-    glBindVertexArray(VAO);
-
     while(running == true){
         SDL_Event event;
 
@@ -122,7 +133,17 @@ int main(int argc, char const *argv[])
 
         glClear ( GL_COLOR_BUFFER_BIT );
 
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glUseProgram(shaderProgram);
+        
+        glm::mat4 trans = glm::mat4(1.0f);
+        trans = glm::translate(trans, glm::vec3(1, -0.5f, 0.0f));
+    
+        unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
 
         SDL_GL_SwapWindow(window);
     }
