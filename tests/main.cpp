@@ -1,17 +1,33 @@
 #define SDL_MAIN_HANDLED
+#define GLEW_STATIC
 
 #include <iostream>
 #include <Window.h>
 #include <Mesh.h>
+#include <Transform.h>
+
 #include <vector>
+#include <chrono>
+#include <thread>
+#include <iostream>
+
+#include <GL/glew.h>
+
+#include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
+#include <gtc/type_ptr.hpp>
+
+using namespace std;
+using namespace chrono;
 
 const GLchar *vertexShaderSource = "#version 330 core\n"
 "layout ( location = 0 ) in vec3 position;\n"
 "layout ( location = 1 ) in vec3 color;\n"
 "out vec3 ourColor;\n"
+"uniform mat4 transform;\n"
 "void main ( )\n"
 "{\n"
-"gl_Position = vec4( position, 1.0 );\n"
+"gl_Position = transform * vec4( position, 1.0 );\n"
 "ourColor = color;\n"
 "}";
 
@@ -65,22 +81,56 @@ int main(){
     glDeleteShader(fragmentShader);
 
     std::vector<Vertex> vertices = {
-        Vertex(glm::vec3(0.5, 0.5, 0.0f), glm::vec3(0.0, 1.0, 0.0)),
-        Vertex(glm::vec3(0.5, -0.5, 0.0f), glm::vec3(0.0, 1.0, 0.0)),
-        Vertex(glm::vec3(-0.5, -0.5, 0.0f), glm::vec3(0.0, 0.0, 1.0)),
-        Vertex(glm::vec3(-0.5, 0.5, 0.0f), glm::vec3(0.0, 0.0, 1.0))
+        Vertex(glm::vec3(-0.5, -0.5, 0.5), glm::vec3(1.0, 0.0, 0.0)),
+        Vertex(glm::vec3(0.5, -0.5, 0.5), glm::vec3(0.0, 1.0, 0.0)),
+        Vertex(glm::vec3(0.5, 0.5, 0.5), glm::vec3(0.0, 0.0, 1.0)),
+        Vertex(glm::vec3(-0.5, 0.5, 0.5), glm::vec3(1.0, 1.0, 1.0)),
+
+        Vertex(glm::vec3(-0.5, -0.5, -0.5), glm::vec3(1.0, 0.0, 0.0)),
+        Vertex(glm::vec3(0.5, -0.5, -0.5), glm::vec3(0.0, 1.0, 0.0)),
+        Vertex(glm::vec3(0.5, 0.5, -0.5), glm::vec3(0.0, 0.0, 1.0)),
+        Vertex(glm::vec3(-0.5, 0.5, -0.5), glm::vec3(1.0, 1.0, 1.0))
     };
     
     std::vector<unsigned int> indices = {
-        0, 1, 3,
-        1, 2 ,3
+        // front
+        0, 1, 2,
+        2, 3, 0,
+        // top
+        3, 2, 6,
+        6, 7, 3,
+        // back
+        7, 6, 5,
+        5, 4, 7,
+        // bottom
+        4, 5, 1,
+        1, 0, 4,
+        // left
+        4, 0, 3,
+        3, 7, 4,
+        // right
+        1, 5, 6,
+        6, 2, 1,
     };
 
     Mesh mesh = Mesh(vertices, indices);
+    Transform transform = Transform();
+    transform.position.y = -0.2;
+    transform.rotation.x = 0.55;
+    transform.scale = glm::vec3(0.5, 0.5, 0.5);
 
+    float counter = 0;
+    bool inverse = false;
     while (window.isRunning())
     {
         window.Clear(0.24, 0.24, 0.24, 1.0);
+                
+        unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform.getMatrix()));
+
+        transform.rotation.y = counter;
+
+        counter += 0.01;
 
         mesh.Draw(shaderProgram);
         
