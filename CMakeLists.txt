@@ -23,4 +23,5 @@ endif()
 message("Detected System: " ${OS})
 message("Detected Architecture: " ${ARCH})
 
-add_subdirectory(app)
+add_subdirectory(src)
+add_subdirectory(tests)
