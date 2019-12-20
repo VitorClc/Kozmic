@@ -2,7 +2,7 @@
 
 class Component
 {
-    private:
-        virtual void Start() = 0;
-        virtual void Update() = 0;
+    public:
+        virtual void Start(){};
+        virtual void Update(){};
 };

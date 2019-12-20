@@ -114,33 +114,69 @@ int main(){
     projection = glm::perspective(45.0f, 800.0f / 600.0f, 0.1f, 1000.0f);
 
     GameObject test = GameObject();
+    GameObject test2 = GameObject();
+    GameObject test3 = GameObject();
 
-    Mesh mesh = Mesh(vertices, indices);
+    test.AddComponent(new Mesh(vertices, indices, shaderProgram, test.transform));
+    test2.AddComponent(new Mesh(vertices, indices, shaderProgram, test2.transform));
+    test3.AddComponent(new Mesh(vertices, indices, shaderProgram, test3.transform));
+
     test.transform->rotation.x = 0.55;
+    test.transform->scale = glm::vec3(0.5, 0.5, 0.5);
+    
+    test2.transform->rotation.x = 0.55;
+    test2.transform->scale = glm::vec3(0.5, 0.5, 0.5);
+    test2.transform->position.x = 1.5;
+
+    test3.transform->rotation.x = 0.55;
+    test3.transform->scale = glm::vec3(0.3, 0.3, 0.3);
+    test3.transform->position.y = 1;
+
+    test.Start();
+    test2.Start();
+    test3.Start();
 
     Transform cameraPosition = Transform();
     cameraPosition.position = glm::vec3(0.0, 0.0, -3.0);
 
     float counter = 0;
     bool inverse = false;
+
+    float counter2 = 0;
+
     while (window.isRunning())
     {
         window.Clear(0.24, 0.24, 0.24, 1.0);
                 
-        unsigned int modelLoc = glGetUniformLocation(shaderProgram, "model");
         unsigned int viewLoc = glGetUniformLocation(shaderProgram, "view");
         unsigned int projectionLoc = glGetUniformLocation(shaderProgram, "projection");
         
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(test.transform->getMatrix()));
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(cameraPosition.getMatrix()));
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
         test.transform->rotation.y = counter;
+        
+        test2.transform->rotation.y = counter;
+        test2.transform->rotation.z = counter;
+
+        test3.transform->position.x = counter2;
 
         counter += 0.01;
-
-        mesh.Draw(shaderProgram);
         
+        if(test3.transform->position.x > 2)
+            inverse = true;
+        else if(test3.transform->position.x < -2)
+            inverse = false;
+
+        if(inverse)
+            counter2 -= 0.01;
+        else
+            counter2 += 0.01;
+
+        test.Update();
+        test2.Update();
+        test3.Update();
+
         window.Update();
     }
 

@@ -1,10 +1,15 @@
 #include <Mesh.h>
 
-Mesh::Mesh(std::vector<Vertex> _vertices, std::vector<unsigned int> _indices)
+Mesh::Mesh(std::vector<Vertex> _vertices, std::vector<unsigned int> _indices, GLuint _shader, Transform* _transform) : Component()
 {
     vertices = _vertices;
     indices = _indices;
 
+    shader = _shader;
+    transform = _transform;
+}
+
+void Mesh::Start(){
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
@@ -26,7 +31,11 @@ Mesh::Mesh(std::vector<Vertex> _vertices, std::vector<unsigned int> _indices)
     glBindVertexArray(0);
 }
 
-void Mesh::Draw(GLuint shader){
+void Mesh::Update()
+{
+    unsigned int modelLoc = glGetUniformLocation(shader, "model");
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(transform->getMatrix()));
+
     glUseProgram(shader);
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
