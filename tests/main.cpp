@@ -7,9 +7,6 @@
 #include <Transform.h>
 
 #include <vector>
-#include <chrono>
-#include <thread>
-#include <iostream>
 
 #include <GL/glew.h>
 
@@ -17,17 +14,16 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 
-using namespace std;
-using namespace chrono;
-
 const GLchar *vertexShaderSource = "#version 330 core\n"
 "layout ( location = 0 ) in vec3 position;\n"
 "layout ( location = 1 ) in vec3 color;\n"
 "out vec3 ourColor;\n"
-"uniform mat4 transform;\n"
+"uniform mat4 model;\n"
+"uniform mat4 view;\n"
+"uniform mat4 projection;\n"
 "void main ( )\n"
 "{\n"
-"gl_Position = transform * vec4( position, 1.0 );\n"
+"gl_Position = projection * view * model * vec4( position, 1.0 );\n"
 "ourColor = color;\n"
 "}";
 
@@ -89,7 +85,7 @@ int main(){
         Vertex(glm::vec3(-0.5, -0.5, -0.5), glm::vec3(1.0, 0.0, 0.0)),
         Vertex(glm::vec3(0.5, -0.5, -0.5), glm::vec3(0.0, 1.0, 0.0)),
         Vertex(glm::vec3(0.5, 0.5, -0.5), glm::vec3(0.0, 0.0, 1.0)),
-        Vertex(glm::vec3(-0.5, 0.5, -0.5), glm::vec3(1.0, 1.0, 1.0))
+        Vertex(glm::vec3(-0.5, 0.5, -0.5), glm::vec3(1.0, 0.0, 1.0))
     };
     
     std::vector<unsigned int> indices = {
@@ -113,11 +109,16 @@ int main(){
         6, 2, 1,
     };
 
+    glm::mat4 projection;
+    projection = glm::perspective(45.0f, 800.0f / 600.0f, 0.1f, 1000.0f);
+
     Mesh mesh = Mesh(vertices, indices);
     Transform transform = Transform();
-    transform.position.y = -0.2;
     transform.rotation.x = 0.55;
-    transform.scale = glm::vec3(0.5, 0.5, 0.5);
+    transform.scale.y = 2;
+
+    Transform cameraPosition = Transform();
+    cameraPosition.position = glm::vec3(0.0, 0.0, -3.0);
 
     float counter = 0;
     bool inverse = false;
@@ -125,8 +126,13 @@ int main(){
     {
         window.Clear(0.24, 0.24, 0.24, 1.0);
                 
-        unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
-        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform.getMatrix()));
+        unsigned int modelLoc = glGetUniformLocation(shaderProgram, "model");
+        unsigned int viewLoc = glGetUniformLocation(shaderProgram, "view");
+        unsigned int projectionLoc = glGetUniformLocation(shaderProgram, "projection");
+        
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(transform.getMatrix()));
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(cameraPosition.getMatrix()));
+        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
         transform.rotation.y = counter;
 

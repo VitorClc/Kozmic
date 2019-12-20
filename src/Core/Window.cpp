@@ -9,6 +9,7 @@ Window::Window(unsigned int width, unsigned int height, const char* title){
     glContext = SDL_GL_CreateContext( window );
     
     glewInit();
+    glEnable(GL_DEPTH_TEST);
     
     running = true;
 }
@@ -19,7 +20,7 @@ bool Window::isRunning(){
 
 void Window::Clear(float r, float g, float b, float a){
     glClearColor (r, g, b, a);
-    glClear ( GL_COLOR_BUFFER_BIT );
+    glClear (GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 }
 
 void Window::Update(){
