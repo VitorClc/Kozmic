@@ -1,3 +1,5 @@
+#pragma once
+
 #define GLEW_STATIC
 
 #include <Component.h>
@@ -7,7 +9,7 @@
 
 #include <GL/glew.h>
 
-class Transform : Component
+class Transform : public Component
 {
     public:
         glm::vec3 position;
@@ -38,8 +40,7 @@ class Transform : Component
 
     private:
         glm::mat4 transform;
-
+        
         void Start(){};
         void Update(){};
-
 };

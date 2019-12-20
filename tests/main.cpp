@@ -5,6 +5,7 @@
 #include <Window.h>
 #include <Mesh.h>
 #include <Transform.h>
+#include <GameObject.h>
 
 #include <vector>
 
@@ -112,10 +113,10 @@ int main(){
     glm::mat4 projection;
     projection = glm::perspective(45.0f, 800.0f / 600.0f, 0.1f, 1000.0f);
 
+    GameObject test = GameObject();
+
     Mesh mesh = Mesh(vertices, indices);
-    Transform transform = Transform();
-    transform.rotation.x = 0.55;
-    transform.scale.y = 2;
+    test.transform->rotation.x = 0.55;
 
     Transform cameraPosition = Transform();
     cameraPosition.position = glm::vec3(0.0, 0.0, -3.0);
@@ -130,11 +131,11 @@ int main(){
         unsigned int viewLoc = glGetUniformLocation(shaderProgram, "view");
         unsigned int projectionLoc = glGetUniformLocation(shaderProgram, "projection");
         
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(transform.getMatrix()));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(test.transform->getMatrix()));
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(cameraPosition.getMatrix()));
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-        transform.rotation.y = counter;
+        test.transform->rotation.y = counter;
 
         counter += 0.01;
 
