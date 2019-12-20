@@ -1,11 +1,13 @@
 #define GLEW_STATIC
 
+#include <Component.h>
+
 #include <glm.hpp>
 #include <gtx/transform.hpp>
 
 #include <GL/glew.h>
 
-class Transform
+class Transform : Component
 {
     public:
         glm::vec3 position;
@@ -36,4 +38,8 @@ class Transform
 
     private:
         glm::mat4 transform;
+
+        void Start(){};
+        void Update(){};
+
 };
