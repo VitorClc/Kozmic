@@ -78,7 +78,7 @@ int main(){
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
-std::vector<Vertex> vertices = {
+    std::vector<Vertex> vertices = {
         Vertex(glm::vec3(-0.5, -0.5, 0.5), glm::vec2(0.0, 0.0)),
         Vertex(glm::vec3(0.5, -0.5, 0.5), glm::vec2(1.0, 0.0)),
         Vertex(glm::vec3(0.5, 0.5, 0.5), glm::vec2(1.0, 1.0)),
