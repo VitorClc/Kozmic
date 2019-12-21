@@ -1,12 +1,21 @@
 #include <Mesh.h>
 
-Mesh::Mesh(std::vector<Vertex> _vertices, std::vector<unsigned int> _indices, GLuint _shader, Transform* _transform) : Component()
+Mesh::Mesh(
+    std::vector<Vertex> _vertices, 
+    std::vector<unsigned int> _indices, 
+    GLuint _shader, 
+    Transform* _transform
+) : Component()
 {
     vertices = _vertices;
     indices = _indices;
 
     shader = _shader;
     transform = _transform;
+}
+
+void Mesh::AddTexture(const char* filename){
+    texture = new Texture(filename);
 }
 
 void Mesh::Start(){
@@ -22,11 +31,13 @@ void Mesh::Start(){
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 
+    //POSITION
     glEnableVertexAttribArray(0);	
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
 
+    //TEXTURE
     glEnableVertexAttribArray(1);	
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
 
     glBindVertexArray(0);
 }
@@ -37,6 +48,9 @@ void Mesh::Update()
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(transform->getMatrix()));
 
     glUseProgram(shader);
+
+    texture->Draw();
+
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);

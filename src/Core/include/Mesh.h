@@ -7,6 +7,7 @@
 
 #include <Component.h>
 #include <Transform.h>
+#include <Texture.h>
 
 #include <vector>
 #include <glm.hpp>
@@ -16,17 +17,25 @@
 class Vertex {
     public:
         glm::vec3 position;
-        glm::vec3 color;
+        glm::vec2 uv;
 
-        Vertex(glm::vec3 _position, glm::vec3 _color){
+        Vertex(glm::vec3 _position, glm::vec2 _uv){
             position = _position;
-            color = _color;
+            uv = _uv;
         };
 };
 
 class Mesh : public Component{
     public:
-        Mesh(std::vector<Vertex> _vertices, std::vector<unsigned int> _indices, GLuint shader, Transform* transform);
+        Mesh(
+            std::vector<Vertex> _vertices, 
+            std::vector<unsigned int> _indices, 
+            GLuint _shader, 
+            Transform* _transform
+        );
+
+        void AddTexture(const char* filename);
+
         void Start();
         void Update();
 
@@ -34,7 +43,9 @@ class Mesh : public Component{
         GLuint shader;
         Transform* transform;
 
-        unsigned int VAO, VBO, EBO;
+        unsigned int VAO, VBO, EBO, textureBuffer;
         std::vector<Vertex> vertices;
         std::vector<unsigned int> indices;
+
+        Texture* texture;
 };  

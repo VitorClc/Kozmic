@@ -7,6 +7,9 @@ target_include_directories(Window PUBLIC ${INCLUDE_DIR})
 add_library(Mesh STATIC Mesh.cpp ${INCLUDE_DIR}/Mesh.h)
 target_include_directories(Mesh PUBLIC ${INCLUDE_DIR})
 
+add_library(Texture STATIC Texture.cpp ${INCLUDE_DIR}/Texture.h)
+target_include_directories(Texture PUBLIC ${INCLUDE_DIR})
+
 ##### DEPENDENCIES CONFIG #####
 set(SDL_DEPS SDL2main SDL2 m user32 winmm imm32 ole32 oleaut32 version uuid advapi32 setupapi shell32 dinput8 dxerr8)
 set(GLEW_DEPS glew32 glu32 opengl32)
@@ -15,6 +18,8 @@ set(GLEW_DEPS glew32 glu32 opengl32)
 CONFIG_DEPENDENCY(Window SDL2 "${SDL_DEPS}")
 CONFIG_DEPENDENCY(Window GLEW "${GLEW_DEPS}")
 
-## GLM
+## Mesh
 CONFIG_DEPENDENCY(Mesh GLEW "${GLEW_DEPS}")
 CONFIG_DEPENDENCY(Mesh GLM glm)
+
+CONFIG_DEPENDENCY(Texture GLEW "${GLEW_DEPS}")

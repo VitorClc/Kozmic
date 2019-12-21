@@ -17,23 +17,24 @@
 
 const GLchar *vertexShaderSource = "#version 330 core\n"
 "layout ( location = 0 ) in vec3 position;\n"
-"layout ( location = 1 ) in vec3 color;\n"
-"out vec3 ourColor;\n"
+"layout ( location = 1 ) in vec2 uv;\n"
+"out vec2 texCoord;\n"
 "uniform mat4 model;\n"
 "uniform mat4 view;\n"
 "uniform mat4 projection;\n"
 "void main ( )\n"
 "{\n"
 "gl_Position = projection * view * model * vec4( position, 1.0 );\n"
-"ourColor = color;\n"
+"texCoord = vec2(uv.x, 1.0 - uv.y);\n"
 "}";
 
 const GLchar *fragmentShaderSource = "#version 330 core\n"
-"in vec3 ourColor;\n"
+"in vec2 texCoord;\n"
 "out vec4 color;\n"
+"uniform sampler2D sampler;\n"
 "void main ( )\n"
 "{\n"
-"color = vec4( ourColor, 1.0f );\n"
+"color = texture(sampler, texCoord);\n"
 "}";
 
 int main(){
@@ -77,16 +78,16 @@ int main(){
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
-    std::vector<Vertex> vertices = {
-        Vertex(glm::vec3(-0.5, -0.5, 0.5), glm::vec3(1.0, 0.0, 0.0)),
-        Vertex(glm::vec3(0.5, -0.5, 0.5), glm::vec3(0.0, 1.0, 0.0)),
-        Vertex(glm::vec3(0.5, 0.5, 0.5), glm::vec3(0.0, 0.0, 1.0)),
-        Vertex(glm::vec3(-0.5, 0.5, 0.5), glm::vec3(1.0, 1.0, 1.0)),
+std::vector<Vertex> vertices = {
+        Vertex(glm::vec3(-0.5, -0.5, 0.5), glm::vec2(0.0, 0.0)),
+        Vertex(glm::vec3(0.5, -0.5, 0.5), glm::vec2(1.0, 0.0)),
+        Vertex(glm::vec3(0.5, 0.5, 0.5), glm::vec2(1.0, 1.0)),
+        Vertex(glm::vec3(-0.5, 0.5, 0.5), glm::vec2(0.0, 1.0)),
 
-        Vertex(glm::vec3(-0.5, -0.5, -0.5), glm::vec3(1.0, 0.0, 0.0)),
-        Vertex(glm::vec3(0.5, -0.5, -0.5), glm::vec3(0.0, 1.0, 0.0)),
-        Vertex(glm::vec3(0.5, 0.5, -0.5), glm::vec3(0.0, 0.0, 1.0)),
-        Vertex(glm::vec3(-0.5, 0.5, -0.5), glm::vec3(1.0, 0.0, 1.0))
+        Vertex(glm::vec3(-0.5, -0.5, -0.5), glm::vec2(1.0, 1.0)),
+        Vertex(glm::vec3(0.5, -0.5, -0.5), glm::vec2(1.0, 0.0)),
+        Vertex(glm::vec3(0.5, 0.5, -0.5), glm::vec2(0.0, 0.0)),
+        Vertex(glm::vec3(-0.5, 0.5, -0.5), glm::vec2(1.0, 1.0))
     };
     
     std::vector<unsigned int> indices = {
@@ -114,35 +115,20 @@ int main(){
     projection = glm::perspective(45.0f, 800.0f / 600.0f, 0.1f, 1000.0f);
 
     GameObject test = GameObject();
-    GameObject test2 = GameObject();
-    GameObject test3 = GameObject();
+    Mesh* mesh = new Mesh(vertices, indices, shaderProgram, test.transform);
+    mesh->AddTexture("test.jpg");
 
-    test.AddComponent(new Mesh(vertices, indices, shaderProgram, test.transform));
-    test2.AddComponent(new Mesh(vertices, indices, shaderProgram, test2.transform));
-    test3.AddComponent(new Mesh(vertices, indices, shaderProgram, test3.transform));
+    test.AddComponent(mesh);
 
     test.transform->rotation.x = 0.55;
     test.transform->scale = glm::vec3(0.5, 0.5, 0.5);
-    
-    test2.transform->rotation.x = 0.55;
-    test2.transform->scale = glm::vec3(0.5, 0.5, 0.5);
-    test2.transform->position.x = 1.5;
-
-    test3.transform->rotation.x = 0.55;
-    test3.transform->scale = glm::vec3(0.3, 0.3, 0.3);
-    test3.transform->position.y = 1;
 
     test.Start();
-    test2.Start();
-    test3.Start();
 
     Transform cameraPosition = Transform();
     cameraPosition.position = glm::vec3(0.0, 0.0, -3.0);
 
     float counter = 0;
-    bool inverse = false;
-
-    float counter2 = 0;
 
     while (window.isRunning())
     {
@@ -154,28 +140,12 @@ int main(){
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(cameraPosition.getMatrix()));
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
+        test.transform->rotation.x = counter;
         test.transform->rotation.y = counter;
-        
-        test2.transform->rotation.y = counter;
-        test2.transform->rotation.z = counter;
 
-        test3.transform->position.x = counter2;
-
-        counter += 0.01;
-        
-        if(test3.transform->position.x > 2)
-            inverse = true;
-        else if(test3.transform->position.x < -2)
-            inverse = false;
-
-        if(inverse)
-            counter2 -= 0.01;
-        else
-            counter2 += 0.01;
+        counter += 0.01f;
 
         test.Update();
-        test2.Update();
-        test3.Update();
 
         window.Update();
     }
