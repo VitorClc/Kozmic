@@ -5,6 +5,25 @@
 #include <Transform.h>
 #include <GameObject.h>
 #include <Camera.h>
+#include <ScriptBase.h>
+#include <iostream>
+
+class RotateCube : public ScriptBase{
+    public:
+        float counter = 0;
+
+        RotateCube(GameObject* _gameObject) : ScriptBase(_gameObject){};
+
+        void Start(){
+            
+        }
+
+        void Update(){
+            counter += 0.0001f;
+            transform->rotation.y += counter;
+            std::cout<<counter<<std::endl;
+        }
+};
 
 class TestScene : public Scene
 {
@@ -53,8 +72,10 @@ class TestScene : public Scene
 
             GameObject* test = new GameObject();
             Mesh* mesh = new Mesh(vertices, indices, shader.GetID(), test->transform);
+            RotateCube* rotateCubeScript = new RotateCube(test);
             mesh->AddTexture("test.jpg");
             test->AddComponent(mesh);
+            test->AddComponent(rotateCubeScript);
 
             test->transform->rotation.x = 0.55;
             test->transform->scale = glm::vec3(0.5, 0.5, 0.5);

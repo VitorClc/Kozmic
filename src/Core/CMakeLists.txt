@@ -9,6 +9,7 @@ set (SOURCES
     Shader.cpp
     Transform.cpp
     Scene.cpp
+    ScriptBase.cpp
 )
 
 set (INCLUDES 
@@ -20,6 +21,7 @@ set (INCLUDES
     ${INCLUDE_DIR}/Shader.h
     ${INCLUDE_DIR}/Transform.h
     ${INCLUDE_DIR}/Scene.h
+    ${INCLUDE_DIR}/ScriptBase.h
 )
 
 add_library(Core STATIC ${SOURCES} ${INCLUDES})
