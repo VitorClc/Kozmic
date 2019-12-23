@@ -11,25 +11,13 @@ class GameObject
         std::vector<Component*> components;
     
     public:
-        Transform* transform = new Transform();
+        Transform* transform;
         
-        GameObject(){
-            AddComponent(transform);
-        }
+        GameObject();
 
-        void Start(){
-           for(unsigned int i = 0; i < components.size(); i++){
-                components[i]->Start();
-            }            
-        }
+        void Start();
 
-        void Update(){
-            for(unsigned int i = 0; i < components.size(); i++){
-                components[i]->Update();
-            }
-        }
+        void Update();
 
-        void AddComponent(Component* component){
-            components.push_back(component);
-        }
+        void AddComponent(Component* component);
 };

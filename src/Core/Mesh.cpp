@@ -45,7 +45,7 @@ void Mesh::Start(){
 void Mesh::Update()
 {
     unsigned int modelLoc = glGetUniformLocation(shader, "model");
-    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(transform->getMatrix()));
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(transform->GetMatrix()));
 
     glUseProgram(shader);
 

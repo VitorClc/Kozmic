@@ -10,22 +10,11 @@
 class Camera : public Component
 {
     public:
-        Camera(GLuint _shader, Transform* _transform){
-            shader = _shader;
-            transform = _transform;
-        }
+        Camera(GLuint _shader, Transform* _transform);
 
-        void Start(){
-            projection = glm::perspective(45.0f, 800.0f / 600.0f, 0.1f, 1000.0f);            
-        }
+        void Start();
 
-        void Update(){
-            unsigned int viewLoc = glGetUniformLocation(shader, "view");
-            unsigned int projectionLoc = glGetUniformLocation(shader, "projection");
-            
-            glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(transform->getMatrix()));
-            glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
-        }
+        void Update();
 
     private:
         GLuint shader;
