@@ -9,6 +9,9 @@ Window::Window(unsigned int width, unsigned int height, const char* title){
     glContext = SDL_GL_CreateContext( window );
     
     glewInit();
+
+    glViewport(0,0, width, height);
+
     glEnable(GL_DEPTH_TEST);
     
     running = true;

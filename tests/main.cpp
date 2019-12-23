@@ -7,10 +7,8 @@
 #include <GameObject.h>
 #include <Camera.h>
 
-#include <glm.hpp>
-
 int main(){
-    Window window = Window(800,600,"TESTS");
+    Window window = Window(1024,720,"TESTS");
 
     std::vector<Vertex> vertices = {
         Vertex(glm::vec3(-0.5, -0.5, 0.5), glm::vec2(0.0, 0.0)),

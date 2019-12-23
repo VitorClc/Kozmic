@@ -2,15 +2,12 @@
 
 #define GLEW_STATIC
 
-#include <vec3.hpp>
 #include <GL/glew.h>
 
 #include <Component.h>
 #include <Transform.h>
 
 #include <vector>
-#include <glm.hpp>
-#include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 
 #define STB_IMAGE_IMPLEMENTATION
