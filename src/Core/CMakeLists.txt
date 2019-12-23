@@ -1,4 +1,4 @@
-set (INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include/)
+set (INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include/Core)
 
 ##### CLASSES CONFIG #####
 add_library(Window STATIC Window.cpp ${INCLUDE_DIR}/Window.h)
