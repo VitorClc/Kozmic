@@ -20,5 +20,16 @@ glm::mat4 Transform::GetMatrix(){
     glm::mat4 rotationZMatrix = glm::rotate(rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
     glm::mat4 scaleMatrix = glm::scale(scale);
     
-    return positionMatrix * rotationXMatrix * rotationYMatrix * rotationZMatrix * scaleMatrix;
+    if(parent != NULL){
+        parentTransform = glm::mat4(1.0f);
+        parentTransform = parent->GetMatrix();
+        return parentTransform * positionMatrix * rotationXMatrix * rotationYMatrix * rotationZMatrix * scaleMatrix;
+    }
+    else{
+        return positionMatrix * rotationXMatrix * rotationYMatrix * rotationZMatrix * scaleMatrix;
+    }
+}
+
+void Transform::SetParent(Transform* _parent){
+    parent = _parent;
 }

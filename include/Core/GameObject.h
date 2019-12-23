@@ -9,6 +9,7 @@ class GameObject
 {
     private:
         std::vector<Component*> components;
+        std::vector<GameObject*> children;
     
     public:
         Transform* transform;
@@ -20,4 +21,6 @@ class GameObject
         void Update();
 
         void AddComponent(Component* component);
+
+        void AddChild(GameObject* _child);
 };

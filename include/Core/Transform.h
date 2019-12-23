@@ -22,10 +22,15 @@ class Transform : public Component
         );
 
         glm::mat4 GetMatrix();
+        void SetParent(Transform* _parent);
 
     private:
         glm::mat4 transform;
-        
+
+        Transform* parent;
+        glm::mat4 parentTransform;
+
         void Start(){};
         void Update(){};
+
 };

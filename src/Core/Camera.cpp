@@ -6,7 +6,7 @@ Camera::Camera(GLuint _shader, Transform* _transform){
 }
 
 void Camera::Start(){
-    projection = glm::perspective(45.0f, 800.0f / 600.0f, 0.1f, 1000.0f);            
+    projection = glm::perspective(45.0f, 1024.0f / 720.0f, 0.1f, 1000.0f);            
 }
 
 void Camera::Update(){
