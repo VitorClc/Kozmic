@@ -8,6 +8,7 @@ set (SOURCES
     GameObject.cpp
     Shader.cpp
     Transform.cpp
+    Scene.cpp
 )
 
 set (INCLUDES 
@@ -18,6 +19,7 @@ set (INCLUDES
     ${INCLUDE_DIR}/GameObject.h
     ${INCLUDE_DIR}/Shader.h
     ${INCLUDE_DIR}/Transform.h
+    ${INCLUDE_DIR}/Scene.h
 )
 
 add_library(Core STATIC ${SOURCES} ${INCLUDES})
