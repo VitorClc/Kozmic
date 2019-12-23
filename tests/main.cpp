@@ -6,14 +6,13 @@
 #include <Mesh.h>
 #include <Transform.h>
 #include <GameObject.h>
+#include <Camera.h>
 
 #include <vector>
 
 #include <GL/glew.h>
 
 #include <glm.hpp>
-#include <gtc/matrix_transform.hpp>
-#include <gtc/type_ptr.hpp>
 
 const GLchar *vertexShaderSource = "#version 330 core\n"
 "layout ( location = 0 ) in vec3 position;\n"
@@ -111,13 +110,15 @@ int main(){
         6, 2, 1,
     };
 
-    glm::mat4 projection;
-    projection = glm::perspective(45.0f, 800.0f / 600.0f, 0.1f, 1000.0f);
+    GameObject cameraObject = GameObject();
+    cameraObject.transform->position.z = -3;
+    Camera* cameraComponent = new Camera(shaderProgram, cameraObject.transform);
+    cameraObject.AddComponent(cameraComponent);
+    cameraObject.Start();
 
     GameObject test = GameObject();
     Mesh* mesh = new Mesh(vertices, indices, shaderProgram, test.transform);
     mesh->AddTexture("test.jpg");
-
     test.AddComponent(mesh);
 
     test.transform->rotation.x = 0.55;
@@ -125,20 +126,13 @@ int main(){
 
     test.Start();
 
-    Transform cameraPosition = Transform();
-    cameraPosition.position = glm::vec3(0.0, 0.0, -3.0);
-
     float counter = 0;
 
     while (window.isRunning())
     {
         window.Clear(0.24, 0.24, 0.24, 1.0);
-                
-        unsigned int viewLoc = glGetUniformLocation(shaderProgram, "view");
-        unsigned int projectionLoc = glGetUniformLocation(shaderProgram, "projection");
-        
-        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(cameraPosition.getMatrix()));
-        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
+        cameraObject.Update();
 
         test.transform->rotation.x = counter;
         test.transform->rotation.y = counter;
