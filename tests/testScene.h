@@ -7,6 +7,8 @@
 #include <Camera.h>
 #include <ScriptBase.h>
 
+#include <iostream>
+
 class RotateCube : public ScriptBase{
     public:
         float counter = 0;
@@ -38,7 +40,6 @@ class RotateChildren : public ScriptBase{
             transform->rotation.x += counter;
         }
 };
-
 
 class TestScene : public Scene
 {
@@ -86,32 +87,11 @@ class TestScene : public Scene
             cameraObject->AddComponent(cameraComponent);
 
             GameObject* test = new GameObject();
-            Mesh* mesh = new Mesh(vertices, indices, shader.GetID(), test->transform);
-            RotateCube* rotateCubeScript = new RotateCube(test);
-            mesh->AddTexture("test.jpg");
-            test->AddComponent(mesh);
-            test->AddComponent(rotateCubeScript);
-            test->transform->rotation.x = 0.55;
-            test->transform->scale = glm::vec3(0.5, 0.5, 0.5);
-
-            GameObject* transformTest = new GameObject();
-            RotateChildren* rotateCubeScript2 = new RotateChildren(transformTest);
-            test->AddComponent(rotateCubeScript2);
-            test->AddChild(transformTest);
-
-            GameObject* test2 = new GameObject();   
-            Mesh* mesh2 = new Mesh(vertices, indices, shader.GetID(), test2->transform);
-            mesh2->AddTexture("test.jpg");
-            test2->AddComponent(mesh2);
-            test2->transform->position.y = -2;
-            transformTest->AddChild(test2);
-
-            GameObject* test3 = new GameObject();
-            Mesh* mesh3 = new Mesh(vertices, indices, shader.GetID(), test3->transform);
-            mesh3->AddTexture("test.jpg");
-            test3->AddComponent(mesh3);
-            test3->transform->position.y = 2;
-            transformTest->AddChild(test3);
+            test->LoadModel("test.fbx", shader.GetID());
+            RotateCube* rotate = new RotateCube(test);
+            test->AddComponent(rotate);
+            
+            std::cout<<test->ChildCount()<<std::endl;
 
             AddGameObject(cameraObject);
             AddGameObject(test);

@@ -19,7 +19,8 @@ const GLchar *fragmentShaderSource = "#version 330 core\n"
 "uniform sampler2D sampler;\n"
 "void main ( )\n"
 "{\n"
-"color = texture(sampler, texCoord);\n"
+//"color = texture(sampler, texCoord);\n"
+"color = vec4(0.0f,0.0f,1.0f,1.0f);\n"
 "}";
 
 void Shader::LoadBasic(){

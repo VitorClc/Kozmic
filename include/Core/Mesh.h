@@ -13,6 +13,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
+#include <assimp/scene.h>
+
 class Texture{
     public:
         Texture(const char* filename){
@@ -61,7 +63,16 @@ class Mesh : public Component{
             Transform* _transform
         );
 
+        Mesh(
+            aiMesh* _mesh,
+            const aiScene* _scene,
+            GLuint _shader,
+            Transform* _transform
+        );
+
         void AddTexture(const char* filename);
+
+        void ProcessModel(aiMesh *mesh, const aiScene *scene);
 
         void Start();
         void Update();
