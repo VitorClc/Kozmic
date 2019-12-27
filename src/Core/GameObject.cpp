@@ -38,17 +38,33 @@ void GameObject::AddChild(GameObject* _child){
 
 void GameObject::LoadModel(const char* path, GLuint shader){
     Assimp::Importer importer;
-    const aiScene *scene = importer.ReadFile( path, aiProcess_Triangulate | aiProcess_FlipUVs );
+    const aiScene *scene = importer.ReadFile( path, 
+        aiProcess_Triangulate | 
+        aiProcess_FlipUVs |
+        aiProcess_JoinIdenticalVertices);
 
     ProcessNode( scene->mRootNode, scene, shader );
 }
 
 void GameObject::ProcessNode(aiNode* node, const aiScene* scene, GLuint shader){
+
+    aiVector3t<float> nodeScale = aiVector3t<float>(0,0,0);
+    aiVector3t<float> nodeRot = aiVector3t<float>(0,0,0);
+    aiVector3t<float> nodePos = aiVector3t<float>(0,0,0);
+
+    node->mTransformation.Decompose(nodeScale, nodeRot, nodePos);
+
     for ( GLuint i = 0; i < node->mNumMeshes; i++ )
     {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
         GameObject* childNode = new GameObject();
-        Mesh* childMesh = new Mesh(mesh, scene, shader, transform);
+
+        //CHANGE TRANSFORM
+        childNode->transform->position = glm::vec3(nodePos.x, nodePos.z, nodePos.y);
+        childNode->transform->rotation = glm::vec3(nodeRot.x, nodeRot.z, nodeRot.y);
+        childNode->transform->scale = glm::vec3(nodeScale.x, nodeScale.z, nodeScale.y);
+
+        Mesh* childMesh = new Mesh(mesh, scene, shader, childNode->transform);
         childNode->AddComponent(childMesh);
         AddChild(childNode);
     }

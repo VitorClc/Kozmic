@@ -10,6 +10,8 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+#include <iostream>
+
 class GameObject
 {
     private:

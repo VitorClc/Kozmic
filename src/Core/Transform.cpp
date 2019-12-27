@@ -30,6 +30,10 @@ glm::mat4 Transform::GetMatrix(){
     }
 }
 
+void Transform::SetMatrix(glm::mat4x4 _matrix){
+    transform = _matrix;
+}
+
 void Transform::SetParent(Transform* _parent){
     parent = _parent;
 }

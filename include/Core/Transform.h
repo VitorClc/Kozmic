@@ -22,6 +22,8 @@ class Transform : public Component
         );
 
         glm::mat4 GetMatrix();
+        void SetMatrix(glm::mat4 _matrix);
+
         void SetParent(Transform* _parent);
 
     private:
