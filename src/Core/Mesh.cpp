@@ -50,13 +50,15 @@ void Mesh::Start(){
     glEnableVertexAttribArray(1);	
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
 
+    //NORMAL
+    glEnableVertexAttribArray(2);	
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
+    
     glBindVertexArray(0);
 }
 
 void Mesh::Update()
 {
-    unsigned int modelLoc = glGetUniformLocation(shader, "model");
-
     glm::mat4 transformMatrix = glm::mat4(1.0f);
 
     if(transform->HasParent()){
@@ -65,7 +67,18 @@ void Mesh::Update()
         transformMatrix = transform->GetMatrix();
     }
 
+    unsigned int modelLoc = glGetUniformLocation(shader, "model");
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(transformMatrix));
+
+    GLint objectColorLoc = glGetUniformLocation( shader, "objectColor" );
+    GLint lightColorLoc = glGetUniformLocation( shader, "lightColor" );
+    GLint lightPosLoc = glGetUniformLocation( shader, "lightPos" );
+    GLint viewPosLoc = glGetUniformLocation( shader, "viewPos" );
+
+    glUniform3f( objectColorLoc, 1.0f, 0.5f, 0.31f );
+    glUniform3f( lightColorLoc, 1.0f, 1.0f, 1.0f );
+    //glUniform3f( lightPosLoc, lightPos.x, lightPos.y, lightPos.z );
+    //glUniform3f( viewPosLoc, camera.GetPosition( ).x, camera.GetPosition( ).y, camera.GetPosition( ).z );
 
     glUseProgram(shader);
 
@@ -84,12 +97,18 @@ void Mesh::ProcessModel(aiMesh *mesh, const aiScene *scene){
     {
         glm::vec3 position;
         glm::vec2 uv;
+        glm::vec3 normal;
         
         // Positions
         position.x = mesh->mVertices[i].x;
         position.y = mesh->mVertices[i].z;
         position.z = mesh->mVertices[i].y;
 
+        // Normal
+        normal.x = mesh->mNormals[i].x;
+        normal.y = mesh->mNormals[i].y;
+        normal.z = mesh->mNormals[i].z;
+            
         if( mesh->mTextureCoords[0] )
         {
             uv.x = mesh->mTextureCoords[0][i].x;
@@ -100,7 +119,7 @@ void Mesh::ProcessModel(aiMesh *mesh, const aiScene *scene){
             uv = glm::vec2( 0.0f, 0.0f );
         }
         
-        Vertex newVertex(position, uv);
+        Vertex newVertex(position, uv, normal);
         vertices.push_back( newVertex );
     }
     

@@ -3,24 +3,59 @@
 const GLchar *vertexShaderSource = "#version 330 core\n"
 "layout ( location = 0 ) in vec3 position;\n"
 "layout ( location = 1 ) in vec2 uv;\n"
+"layout ( location = 2 ) in vec3 normal;\n"
+
 "out vec2 texCoord;\n"
+"out vec3 outNormal;\n"
+"out vec3 fragPos;\n"
+
 "uniform mat4 model;\n"
 "uniform mat4 view;\n"
 "uniform mat4 projection;\n"
+
 "void main ( )\n"
 "{\n"
 "gl_Position = projection * view * model * vec4( position, 1.0 );\n"
-"texCoord = vec2(uv.x, 1.0 - uv.y);\n"
+"fragPos = vec3(model * vec4(position, 1.0f));\n"
+"outNormal = mat3(transpose(inverse(model))) * normal;\n"
+//"texCoord = vec2(uv.x, 1.0 - uv.y);\n"
 "}";
 
 const GLchar *fragmentShaderSource = "#version 330 core\n"
-"in vec2 texCoord;\n"
 "out vec4 color;\n"
+
+"in vec3 FragPos;\n"
+"in vec3 Normal;\n"
+
 "uniform sampler2D sampler;\n"
+
+"uniform vec3 viewPos;\n"
+"uniform vec3 lightPos;\n"
+"uniform vec3 lightColor;\n"
+"uniform vec3 objectColor;\n"
+
 "void main ( )\n"
 "{\n"
 //"color = texture(sampler, texCoord);\n"
-"color = vec4(0.0f,0.0f,1.0f,1.0f);\n"
+// Ambient
+"float ambientStrength = 0.1f;\n"
+"vec3 ambient = ambientStrength * lightColor;\n"
+
+// Diffuse
+"vec3 norm = normalize(Normal);\n"
+"vec3 lightDir = normalize(lightPos - FragPos);\n"
+"float diff = max(dot(norm, lightDir), 0.0);\n"
+"vec3 diffuse = diff * lightColor;\n"
+
+// Specular
+"float specularStrength = 0.5f;\n"
+"vec3 viewDir = normalize(viewPos - FragPos);\n"
+"vec3 reflectDir = reflect(-lightDir, norm);\n"
+"float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);\n"
+"vec3 specular = specularStrength * spec * lightColor;\n"
+
+"vec3 result = (ambient + diffuse + specular) * objectColor;\n"
+"color = vec4(result, 1.0f);\n"
 "}";
 
 void Shader::LoadBasic(){

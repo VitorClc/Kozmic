@@ -47,10 +47,12 @@ class Vertex {
     public:
         glm::vec3 position;
         glm::vec2 uv;
+        glm::vec3 normal;
 
-        Vertex(glm::vec3 _position, glm::vec2 _uv){
+        Vertex(glm::vec3 _position, glm::vec2 _uv, glm::vec3 _normal){
             position = _position;
             uv = _uv;
+            normal = _normal;
         };
 };
 
@@ -87,6 +89,6 @@ class Mesh : public Component{
         std::vector<Vertex> vertices;
         std::vector<unsigned int> indices;
         std::vector<Texture> textures;
-
+        
         Texture* texture;
 };  

@@ -40,25 +40,8 @@ class TestScene : public Scene
             RotateCube* rotate = new RotateCube(test);
             test->AddComponent(rotate);
             test->transform->scale = glm::vec3(0.5,0.5,0.5);
-  
-            GameObject* test2 = new GameObject();
-            test2->LoadModel("test2.dae", shader.GetID());
-            test2->transform->position.y = 3;
-
-            GameObject* test3 = new GameObject();
-            test3->LoadModel("test3.dae", shader.GetID());
-            test3->transform->position.x = 3;
-
-            GameObject* test4 = new GameObject();
-            test4->LoadModel("test3.dae", shader.GetID());
-            RotateCube* rotate2 = new RotateCube(test4);
-            test4->AddComponent(rotate2);
-            test4->transform->position.x = -3;
 
             AddGameObject(cameraObject);
             AddGameObject(test);
-            AddGameObject(test2);
-            AddGameObject(test3);
-            AddGameObject(test4);
         }
 };
