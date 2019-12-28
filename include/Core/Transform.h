@@ -8,6 +8,8 @@
 
 #include <GL/glew.h>
 
+#include <iostream>
+
 class Transform : public Component
 {
     public:
@@ -24,13 +26,14 @@ class Transform : public Component
         glm::mat4 GetMatrix();
         void SetMatrix(glm::mat4 _matrix);
 
+        Transform* GetParent();
         void SetParent(Transform* _parent);
+        bool HasParent();
 
     private:
         glm::mat4 transform;
 
         Transform* parent;
-        glm::mat4 parentTransform;
 
         void Start(){};
         void Update(){};

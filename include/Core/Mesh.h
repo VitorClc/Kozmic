@@ -70,6 +70,8 @@ class Mesh : public Component{
             Transform* _transform
         );
 
+        ~Mesh();
+
         void AddTexture(const char* filename);
 
         void ProcessModel(aiMesh *mesh, const aiScene *scene);

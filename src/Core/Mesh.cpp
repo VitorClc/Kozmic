@@ -56,7 +56,16 @@ void Mesh::Start(){
 void Mesh::Update()
 {
     unsigned int modelLoc = glGetUniformLocation(shader, "model");
-    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(transform->GetMatrix()));
+
+    glm::mat4 transformMatrix = glm::mat4(1.0f);
+
+    if(transform->HasParent()){
+        transformMatrix = transform->GetParent()->GetMatrix() * transform->GetMatrix();
+    }else{
+        transformMatrix = transform->GetMatrix();
+    }
+
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(transformMatrix));
 
     glUseProgram(shader);
 
@@ -104,4 +113,9 @@ void Mesh::ProcessModel(aiMesh *mesh, const aiScene *scene){
             indices.push_back( face.mIndices[j] );
         }
     }
+}
+
+Mesh::~Mesh(){
+    glDeleteVertexArrays( 1, &VAO );
+    glDeleteBuffers( 1, &VBO );
 }

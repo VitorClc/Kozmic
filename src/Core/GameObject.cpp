@@ -36,14 +36,21 @@ void GameObject::AddChild(GameObject* _child){
     _child->transform->SetParent(this->transform);
 }
 
-void GameObject::LoadModel(const char* path, GLuint shader){
+bool GameObject::LoadModel(const char* path, GLuint shader){
     Assimp::Importer importer;
     const aiScene *scene = importer.ReadFile( path, 
         aiProcess_Triangulate | 
         aiProcess_FlipUVs |
         aiProcess_JoinIdenticalVertices);
 
+    if(!scene){
+        std::cout<<"Couldn't load model"<<std::endl;
+        return false;
+    }
+
     ProcessNode( scene->mRootNode, scene, shader );
+
+    return true;
 }
 
 void GameObject::ProcessNode(aiNode* node, const aiScene* scene, GLuint shader){
