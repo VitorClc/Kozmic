@@ -38,7 +38,10 @@ void Window::ProcessInputs(){
     }
 
     //GET KEYBOARD INPUTS
-    inputs = SDL_GetKeyboardState(NULL);
+    inputManager.keyboard.keys = SDL_GetKeyboardState(NULL);
+
+    //GET MOUSE POS
+    SDL_GetMouseState(&inputManager.mouse.xPosition, &inputManager.mouse.yPosition );
 }
 void Window::Update(){
     SDL_GL_SwapWindow(window);

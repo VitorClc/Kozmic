@@ -19,7 +19,8 @@ int main(){
         lastTime = startTime;
 
         window.ProcessInputs();
-        testScene.ProcessInputs(window.inputs, deltaTime);
+        
+        testScene.ProcessInputs(window.inputManager, deltaTime);
 
         window.Clear(0.24, 0.24, 0.24, 1.0);
 

@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 #include <GL/glew.h>
+#include <InputManager.h>
 
 class Window{
     public:
@@ -18,7 +19,7 @@ class Window{
         
         ~Window();
 
-        const Uint8 *inputs;
+        InputManager inputManager;
         
     private:
         SDL_Window *window;

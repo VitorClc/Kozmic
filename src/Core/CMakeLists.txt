@@ -22,6 +22,7 @@ set (INCLUDES
     ${INCLUDE_DIR}/Transform.h
     ${INCLUDE_DIR}/Scene.h
     ${INCLUDE_DIR}/ScriptBase.h
+    ${INCLUDE_DIR}/InputManager.h
 )
 
 add_library(Core STATIC ${SOURCES} ${INCLUDES})

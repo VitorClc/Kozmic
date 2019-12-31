@@ -31,27 +31,27 @@ class TestScene : public Scene
             AddGameObject(test);
         }
 
-        void ProcessInputs(const Uint8 *inputs, double deltaTime){
+        void ProcessInputs(InputManager inputManager, double deltaTime){
             cameraSpeed = 2.0f * deltaTime;
 
-            if (inputs[SDL_SCANCODE_W]) {
+            if (inputManager.keyboard.keys[SDL_SCANCODE_W]) {
                 cameraObject->transform->position.z += 1 * cameraSpeed;
             }
-            if (inputs[SDL_SCANCODE_S]) {
+            if (inputManager.keyboard.keys[SDL_SCANCODE_S]) {
                 cameraObject->transform->position.z -= 1 * cameraSpeed;
             }
 
-            if (inputs[SDL_SCANCODE_A]) {
+            if (inputManager.keyboard.keys[SDL_SCANCODE_A]) {
                 cameraObject->transform->position.x += 1 * cameraSpeed;
             }
-            if (inputs[SDL_SCANCODE_D]) {
+            if (inputManager.keyboard.keys[SDL_SCANCODE_D]) {
                 cameraObject->transform->position.x -= 1 * cameraSpeed;
             }
 
-            if (inputs[SDL_SCANCODE_LSHIFT]) {
+            if (inputManager.keyboard.keys[SDL_SCANCODE_LSHIFT]) {
                 cameraObject->transform->position.y -= 1 * cameraSpeed;
             }
-            if (inputs[SDL_SCANCODE_LCTRL]) {
+            if (inputManager.keyboard.keys[SDL_SCANCODE_LCTRL]) {
                 cameraObject->transform->position.y += 1 * cameraSpeed;
             }
         }
