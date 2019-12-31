@@ -9,5 +9,6 @@ class Scene{
         void AddGameObject(GameObject* _gameObject);
 
         void Start();
+        void ProcessInputs();
         void Update();
 };

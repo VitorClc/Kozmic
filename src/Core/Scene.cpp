@@ -7,6 +7,7 @@ void Scene::Start(){
 }
 
 void Scene::Update(){
+    
     for(unsigned int i = 0; i < gameObjects.size(); i++){
         gameObjects[i]->Update();
     }
