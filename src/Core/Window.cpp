@@ -17,7 +17,7 @@ Window::Window(unsigned int width, unsigned int height, const char* title){
     running = true;
 }
 
-bool Window::isRunning(){
+bool Window::IsRunning(){
     return running;
 }
 
@@ -26,16 +26,26 @@ void Window::Clear(float r, float g, float b, float a){
     glClear (GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 }
 
-void Window::Update(){
+void Window::ProcessInputs(){
+    SDL_PumpEvents();
+
+    //DETECT EXIT
     SDL_Event event;
 
-    while(SDL_PollEvent(&event)){
-        if(event.type == SDL_QUIT){
-            running = false;
-        }
+    SDL_PollEvent(&event);
+    if(event.type == SDL_QUIT){
+        Exit();
     }
 
+    //GET KEYBOARD INPUTS
+    inputs = SDL_GetKeyboardState(NULL);
+}
+void Window::Update(){
     SDL_GL_SwapWindow(window);
+}
+
+void Window::Exit(){
+    running = false;
 }
 
 Window::~Window(){

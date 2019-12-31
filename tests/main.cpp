@@ -9,8 +9,6 @@ int main(){
     TestScene testScene = TestScene();
     testScene.Start();
 
-    SDL_Event event;
-
     float startTime = SDL_GetTicks();
     float lastTime = SDL_GetTicks();
 
@@ -20,11 +18,8 @@ int main(){
         float deltaTime = (startTime - lastTime) / 1000.0f;
         lastTime = startTime;
 
-        while(SDL_PollEvent(&event) != 0){
-            if(event.type == SDL_QUIT){
-                window.Exit();
-            }
-        }
+        window.ProcessInputs();
+        testScene.ProcessInputs(window.inputs, deltaTime);
 
         window.Clear(0.24, 0.24, 0.24, 1.0);
 

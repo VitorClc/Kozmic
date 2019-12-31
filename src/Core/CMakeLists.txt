@@ -10,7 +10,6 @@ set (SOURCES
     Transform.cpp
     Scene.cpp
     ScriptBase.cpp
-    Timer.cpp
 )
 
 set (INCLUDES 
@@ -23,7 +22,6 @@ set (INCLUDES
     ${INCLUDE_DIR}/Transform.h
     ${INCLUDE_DIR}/Scene.h
     ${INCLUDE_DIR}/ScriptBase.h
-    ${INCLUDE_DIR}/Timer.h
 )
 
 add_library(Core STATIC ${SOURCES} ${INCLUDES})

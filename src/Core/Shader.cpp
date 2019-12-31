@@ -6,7 +6,7 @@ const GLchar *vertexShaderSource = "#version 330 core\n"
 "layout ( location = 2 ) in vec3 normal;\n"
 
 "out vec2 texCoord;\n"
-"out vec3 outNormal;\n"
+"out vec3 Normal;\n"
 "out vec3 fragPos;\n"
 
 "uniform mat4 model;\n"
@@ -17,14 +17,14 @@ const GLchar *vertexShaderSource = "#version 330 core\n"
 "{\n"
 "gl_Position = projection * view * model * vec4( position, 1.0 );\n"
 "fragPos = vec3(model * vec4(position, 1.0f));\n"
-"outNormal = mat3(transpose(inverse(model))) * normal;\n"
+"Normal = mat3(transpose(inverse(model))) * normal;\n"
 //"texCoord = vec2(uv.x, 1.0 - uv.y);\n"
 "}";
 
 const GLchar *fragmentShaderSource = "#version 330 core\n"
 "out vec4 color;\n"
 
-"in vec3 FragPos;\n"
+"in vec3 fragPos;\n"
 "in vec3 Normal;\n"
 
 "uniform sampler2D sampler;\n"
@@ -43,13 +43,13 @@ const GLchar *fragmentShaderSource = "#version 330 core\n"
 
 // Diffuse
 "vec3 norm = normalize(Normal);\n"
-"vec3 lightDir = normalize(lightPos - FragPos);\n"
+"vec3 lightDir = normalize(lightPos - fragPos);\n"
 "float diff = max(dot(norm, lightDir), 0.0);\n"
 "vec3 diffuse = diff * lightColor;\n"
 
 // Specular
 "float specularStrength = 0.5f;\n"
-"vec3 viewDir = normalize(viewPos - FragPos);\n"
+"vec3 viewDir = normalize(viewPos - fragPos);\n"
 "vec3 reflectDir = reflect(-lightDir, norm);\n"
 "float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);\n"
 "vec3 specular = specularStrength * spec * lightColor;\n"
