@@ -6,7 +6,7 @@
 
 class Window{
     public:
-        Window(unsigned int width, unsigned int height, const char* title);
+        Window(unsigned int _width, unsigned int _height, const char* title);
         
         bool IsRunning();
         
@@ -21,6 +21,8 @@ class Window{
 
         InputManager inputManager;
         
+        int width, height;
+
     private:
         SDL_Window *window;
         SDL_GLContext glContext;

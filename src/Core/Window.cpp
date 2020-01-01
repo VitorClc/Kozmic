@@ -1,8 +1,11 @@
 #include <Window.h>
 
 //TODO: ADD LOGS
-Window::Window(unsigned int width, unsigned int height, const char* title){
+Window::Window(unsigned int _width, unsigned int _height, const char* title){
     SDL_Init(SDL_INIT_VIDEO);
+
+    width = _width;
+    height = _height;
 
     window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
 
@@ -43,7 +46,9 @@ void Window::ProcessInputs(){
     //GET MOUSE POS
     SDL_GetMouseState(&inputManager.mouse.xPosition, &inputManager.mouse.yPosition );
 }
+
 void Window::Update(){
+    //SDL_WarpMouseInWindow(window, width / 2, height / 2); 
     SDL_GL_SwapWindow(window);
 }
 

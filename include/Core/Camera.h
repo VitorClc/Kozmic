@@ -16,6 +16,7 @@ class Camera : public Component
 
     private:
         GLuint shader;
+
         Transform* transform;
 
         glm::mat4 projection;

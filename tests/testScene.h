@@ -7,11 +7,15 @@
 #include <Camera.h>
 #include <ScriptBase.h>
 
-
 class TestScene : public Scene
 {
     GameObject* cameraObject;
     float cameraSpeed;
+
+    float lastX = 1024 / 2.0f;
+    float lastY = 720 / 2.0f;
+
+    float sensitivity = 0.1;
 
     public:
         TestScene(){
@@ -20,6 +24,7 @@ class TestScene : public Scene
 
             cameraObject = new GameObject();
             cameraObject->transform->position.z = -7;
+            cameraObject->transform->rotation.y = 90;
             Camera* cameraComponent = new Camera(shader.GetID(), cameraObject->transform);
             cameraObject->AddComponent(cameraComponent);
 
@@ -32,6 +37,22 @@ class TestScene : public Scene
         }
 
         void ProcessInputs(InputManager inputManager, double deltaTime){
+
+            float xpos = inputManager.mouse.yPosition;
+            float ypos = inputManager.mouse.xPosition;
+
+            float xoffset = xpos - lastX;
+            float yoffset = ypos - lastY; 
+            lastX = xpos;
+            lastY = ypos;
+
+            xoffset *= sensitivity;
+            yoffset *= sensitivity;
+
+            if(SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT)){
+                cameraObject->transform->rotation.x -= xoffset;
+                cameraObject->transform->rotation.y += yoffset;
+            }
             cameraSpeed = 2.0f * deltaTime;
 
             if (inputManager.keyboard.keys[SDL_SCANCODE_W]) {
@@ -49,10 +70,10 @@ class TestScene : public Scene
             }
 
             if (inputManager.keyboard.keys[SDL_SCANCODE_LSHIFT]) {
-                cameraObject->transform->position.y -= 1 * cameraSpeed;
+                cameraObject->transform->position.y += 1 * cameraSpeed;
             }
             if (inputManager.keyboard.keys[SDL_SCANCODE_LCTRL]) {
-                cameraObject->transform->position.y += 1 * cameraSpeed;
+                cameraObject->transform->position.y -= 1 * cameraSpeed;
             }
         }
 };
