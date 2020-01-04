@@ -57,7 +57,7 @@ void Mesh::Start(){
     glBindVertexArray(0);
 }
 
-void Mesh::Render()
+void Mesh::Render(Transform* _activeCamera, Transform* _lightPos)
 {
     glm::mat4 transformMatrix = glm::mat4(1.0f);
 
@@ -79,11 +79,17 @@ void Mesh::Render()
 
     glUniform3f( objectColorLoc, 1.0f, 0.5f, 0.31f );
     glUniform3f( lightColorLoc, 1.0f, 1.0f, 1.0f );
-    //glUniform3f( lightPosLoc, lightPos.x, lightPos.y, lightPos.z );
-    //glUniform3f( viewPosLoc, camera.GetPosition( ).x, camera.GetPosition( ).y, camera.GetPosition( ).z );
+
+    glUniform3f(lightPosLoc,_lightPos->position.x, 
+                            _lightPos->position.y, 
+                            _lightPos->position.z);
+
+    glUniform3f(viewPosLoc, _activeCamera->position.x, 
+                            _activeCamera->position.y, 
+                            _activeCamera->position.z);
 
     if(textures.size() != 0){
-        texture->Draw();
+        texture->Draw();    
     }
 
     glBindVertexArray(VAO);
@@ -106,8 +112,8 @@ void Mesh::ProcessModel(aiMesh *mesh, const aiScene *scene){
 
         // Normal
         normal.x = mesh->mNormals[i].x;
-        normal.y = mesh->mNormals[i].y;
-        normal.z = mesh->mNormals[i].z;
+        normal.y = mesh->mNormals[i].z;
+        normal.z = mesh->mNormals[i].y;
             
         if( mesh->mTextureCoords[0] )
         {

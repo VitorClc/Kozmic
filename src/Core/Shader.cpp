@@ -18,7 +18,6 @@ const GLchar *vertexShaderSource = "#version 330 core\n"
 "gl_Position = projection * view * model * vec4( position, 1.0 );\n"
 "fragPos = vec3(model * vec4(position, 1.0f));\n"
 "Normal = mat3(transpose(inverse(model))) * normal;\n"
-//"texCoord = vec2(uv.x, 1.0 - uv.y);\n"
 "}";
 
 const GLchar *fragmentShaderSource = "#version 330 core\n"
@@ -36,7 +35,6 @@ const GLchar *fragmentShaderSource = "#version 330 core\n"
 
 "void main ( )\n"
 "{\n"
-//"color = texture(sampler, texCoord);\n"
 // Ambient
 "float ambientStrength = 0.1f;\n"
 "vec3 ambient = ambientStrength * lightColor;\n"
@@ -60,8 +58,6 @@ const GLchar *fragmentShaderSource = "#version 330 core\n"
 
 const GLchar *lampVS = "#version 330 core\n"
 "layout ( location = 0 ) in vec3 position;\n"
-"layout ( location = 1 ) in vec2 uv;\n"
-"layout ( location = 2 ) in vec3 normal;\n"
 
 "uniform mat4 model;\n"
 "uniform mat4 view;\n"

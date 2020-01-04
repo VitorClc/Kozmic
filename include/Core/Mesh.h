@@ -79,7 +79,7 @@ class Mesh{
         void ProcessModel(aiMesh *mesh, const aiScene *scene);
 
         void Start();
-        void Render();
+        void Render(Transform* _activeCamera, Transform* _lightPos);
 
     private:
         GLuint shader;

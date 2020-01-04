@@ -28,7 +28,7 @@ class GameObject
 
         void Update();
 
-        void Render();
+        void Render(Transform* _activeCamera, Transform* _lightPos);
 
         void SetMesh(Mesh* mesh);
 

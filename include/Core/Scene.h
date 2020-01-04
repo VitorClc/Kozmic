@@ -14,5 +14,5 @@ class Scene{
 
         void Start();
         void Update();
-        void Render();
+        void Render(Transform* _activeCamera, Transform* _lightPos);
 };

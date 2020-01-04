@@ -35,16 +35,16 @@ void GameObject::Update(){
     }
 }
 
-void GameObject::Render(){
+void GameObject::Render(Transform* _activeCamera, Transform* _lightPos){
     //IF HAS MESH, RENDER IT
     if(mesh != NULL){
-        mesh->Render();
+        mesh->Render(_activeCamera, _lightPos);
     }
 
     //RENDER CHILDREN MESHES
     for(unsigned int i = 0; i < children.size(); i++){
         if(children[i]->mesh != NULL){
-            children[i]->mesh->Render();
+            children[i]->mesh->Render(_activeCamera, _lightPos);
         }
     }
 }
@@ -93,7 +93,7 @@ void GameObject::ProcessNode(aiNode* node, const aiScene* scene, GLuint shader){
         GameObject* childNode = new GameObject();
 
         //CHANGE TRANSFORM
-        childNode->transform->position = glm::vec3(nodePos.x, nodePos.y, nodePos.z);
+        childNode->transform->position = glm::vec3(nodePos.x, nodePos.z, nodePos.y);
         childNode->transform->rotation = glm::vec3(nodeRot.x, nodeRot.y, nodeRot.z);
         childNode->transform->scale = glm::vec3(nodeScale.x, nodeScale.y, nodeScale.z);
 
