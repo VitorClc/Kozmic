@@ -18,13 +18,12 @@ int main(){
         float deltaTime = (startTime - lastTime) / 1000.0f;
         lastTime = startTime;
 
+        window.Clear(0.24, 0.24, 0.24, 1.0);
         window.ProcessInputs();
         
         testScene.ProcessInputs(window.inputManager, deltaTime);
-
-        window.Clear(0.24, 0.24, 0.24, 1.0);
-
         testScene.Update();
+
         window.Update();
     }
 

@@ -58,6 +58,28 @@ const GLchar *fragmentShaderSource = "#version 330 core\n"
 "color = vec4(result, 1.0f);\n"
 "}";
 
+const GLchar *lampVS = "#version 330 core\n"
+"layout ( location = 0 ) in vec3 position;\n"
+"layout ( location = 1 ) in vec2 uv;\n"
+"layout ( location = 2 ) in vec3 normal;\n"
+
+"uniform mat4 model;\n"
+"uniform mat4 view;\n"
+"uniform mat4 projection;\n"
+
+"void main ( )\n"
+"{\n"
+"gl_Position = projection * view * model * vec4( position, 1.0 );\n"
+"}";
+
+const GLchar *lampFS = "#version 330 core\n"
+"out vec4 color;\n"
+
+"void main ( )\n"
+"{\n"
+"color = vec4(1.0f);\n"
+"}";
+
 void Shader::LoadBasic(){
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource( vertexShader, 1, &vertexShaderSource, NULL);
@@ -74,6 +96,45 @@ void Shader::LoadBasic(){
 
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+    glCompileShader(fragmentShader);
+
+    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+    if(!success){
+        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+        std::cout<<"FRAGMENT SHADER COMPILATION FAILED: \n"<<infoLog << std::endl;
+    }    
+
+    shaderID = glCreateProgram();
+    glAttachShader(shaderID, vertexShader);
+    glAttachShader(shaderID, fragmentShader);
+    glLinkProgram(shaderID);
+
+    glGetShaderiv(shaderID, GL_LINK_STATUS, &success);
+    if(!success){
+        glGetProgramInfoLog(shaderID, 512, NULL, infoLog);
+        std::cout<<"SHADER LINKING FAILED: \n"<<infoLog << std::endl;
+    }
+
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+}
+
+void Shader::LoadLamp(){
+    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource( vertexShader, 1, &lampVS, NULL);
+    glCompileShader(vertexShader);
+
+    GLint success;
+    GLchar infoLog[512];
+
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    if(!success){
+        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+        std::cout<<"VERTEX SHADER COMPILATION FAILED: \n"<<infoLog << std::endl;
+    }    
+
+    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &lampFS, NULL);
     glCompileShader(fragmentShader);
 
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);

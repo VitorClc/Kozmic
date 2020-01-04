@@ -8,6 +8,7 @@ class Shader
 {
     public:
         void LoadBasic();
+        void LoadLamp();
 
         GLuint GetID();
 

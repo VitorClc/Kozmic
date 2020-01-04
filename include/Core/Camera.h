@@ -8,14 +8,15 @@
 class Camera : public Component
 {
     public:
-        Camera(GLuint _shader, Transform* _transform);
+        Camera(std::vector<GLuint> _shaders, Transform* _transform);
 
         void Start();
 
         void Update();
+        
+        std::vector<GLuint> shaders;
 
     private:
-        GLuint shader;
 
         Transform* transform;
 

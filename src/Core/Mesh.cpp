@@ -67,6 +67,8 @@ void Mesh::Update()
         transformMatrix = transform->GetMatrix();
     }
 
+    glUseProgram(shader);
+
     unsigned int modelLoc = glGetUniformLocation(shader, "model");
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(transformMatrix));
 
@@ -79,8 +81,6 @@ void Mesh::Update()
     glUniform3f( lightColorLoc, 1.0f, 1.0f, 1.0f );
     //glUniform3f( lightPosLoc, lightPos.x, lightPos.y, lightPos.z );
     //glUniform3f( viewPosLoc, camera.GetPosition( ).x, camera.GetPosition( ).y, camera.GetPosition( ).z );
-
-    glUseProgram(shader);
 
     if(textures.size() != 0){
         texture->Draw();

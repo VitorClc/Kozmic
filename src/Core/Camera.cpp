@@ -1,7 +1,7 @@
 #include <Camera.h>
 
-Camera::Camera(GLuint _shader, Transform* _transform){
-    shader = _shader;
+Camera::Camera(std::vector<GLuint> _shaders, Transform* _transform){
+    shaders = _shaders;
     transform = _transform;
 }
 
@@ -10,9 +10,6 @@ void Camera::Start(){
 }
 
 void Camera::Update(){
-    unsigned int viewLoc = glGetUniformLocation(shader, "view");
-    unsigned int projectionLoc = glGetUniformLocation(shader, "projection");
-    
     glm::vec3 viewFront;
     viewFront.x = cos(glm::radians(transform->rotation.y)) * cos(glm::radians(transform->rotation.x));
     viewFront.y = sin(glm::radians(transform->rotation.x));
@@ -25,6 +22,10 @@ void Camera::Update(){
 
     glm::mat4 view = glm::lookAt(transform->position, transform->position + transform->front, transform->up);
     
-    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+    for(unsigned int i = 0; i < shaders.size(); i++){
+        unsigned int viewLoc = glGetUniformLocation(shaders[i], "view");
+        unsigned int projectionLoc = glGetUniformLocation(shaders[i], "projection");
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+    }
 }

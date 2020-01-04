@@ -19,20 +19,34 @@ class TestScene : public Scene
 
     public:
         TestScene(){
+            std::vector<GLuint> shaders;
+
             Shader shader = Shader();
             shader.LoadBasic();
+            shaders.push_back(shader.GetID());
+
+            Shader shader2 = Shader();
+            shader2.LoadLamp();
+            shaders.push_back(shader2.GetID());
 
             cameraObject = new GameObject();
             cameraObject->transform->position.z = -7;
             cameraObject->transform->rotation.y = 90;
-            Camera* cameraComponent = new Camera(shader.GetID(), cameraObject->transform);
+            Camera* cameraComponent = new Camera(shaders, cameraObject->transform);
             cameraObject->AddComponent(cameraComponent);
+
+            AddCamera(cameraObject);
+            activeCamera = cameras[0];
 
             GameObject* test = new GameObject();
             test->LoadModel("test.dae", shader.GetID());
             test->transform->scale = glm::vec3(0.5,0.5,0.5);
 
-            AddGameObject(cameraObject);
+            GameObject* test2 = new GameObject();
+            test2->LoadModel("test.dae", shader2.GetID());
+            test2->transform->position.x = -4;
+
+            AddGameObject(test2);
             AddGameObject(test);
         }
 
