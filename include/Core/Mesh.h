@@ -15,6 +15,16 @@
 
 #include <assimp/scene.h>
 
+class Material{
+    public:
+        Material(){};
+
+        glm::vec3 ambientColor = glm::vec3(0.0,0.0,0.0);
+        glm::vec3 diffuseColor = glm::vec3(1.0,1.0,1.0);
+        glm::vec3 specularColor = glm::vec3(1.0f, 1.0f, 1.0f);
+        float shininess = 32.0f;
+};
+
 class Texture{
     public:
         Texture(const char* filename){
@@ -91,4 +101,5 @@ class Mesh{
         std::vector<Texture> textures;
         
         Texture* texture;
+        Material material = Material();
 };  

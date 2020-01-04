@@ -34,8 +34,8 @@ class TestScene : public Scene
             shaders.push_back(shader2.GetID());
 
             cameraObject = new GameObject();
-            cameraObject->transform->position.z = -7;
-            cameraObject->transform->rotation.y = 90;
+            cameraObject->transform->position.z = 7;
+            cameraObject->transform->rotation.y = -90;
             Camera* cameraComponent = new Camera(shaders, cameraObject->transform);
             cameraObject->AddComponent(cameraComponent);
 
@@ -47,8 +47,9 @@ class TestScene : public Scene
 
             light = new GameObject();
             light->LoadModel("test.dae", shader2.GetID());
-            light->transform->position.x = -4;
-            light->transform->position.y = -2;
+            light->transform->position.x = 3;
+            light->transform->position.y = 8;
+            light->transform->position.z = 4;
             light->transform->scale = glm::vec3(0.5,0.5,0.5);
             
             AddGameObject(light);
@@ -60,7 +61,7 @@ class TestScene : public Scene
             float ypos = inputManager.mouse.xPosition;
 
             float xoffset = xpos - lastX;
-            float yoffset = ypos - lastY; 
+            float yoffset = lastY - ypos; 
             lastX = xpos;
             lastY = ypos;
 
@@ -68,24 +69,24 @@ class TestScene : public Scene
             yoffset *= sensitivity;
 
             if(SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT)){
-                cameraObject->transform->rotation.x -= xoffset;
+                cameraObject->transform->rotation.x += xoffset;
                 cameraObject->transform->rotation.y += yoffset;
             }
             cameraSpeed = 2.0f * deltaTime;
             movSpeed = 2.0f * deltaTime;
 
             if (inputManager.keyboard.keys[SDL_SCANCODE_W]) {
-                cameraObject->transform->position.z += 1 * cameraSpeed;
+                cameraObject->transform->position.z -= 1 * cameraSpeed;
             }
             if (inputManager.keyboard.keys[SDL_SCANCODE_S]) {
-                cameraObject->transform->position.z -= 1 * cameraSpeed;
+                cameraObject->transform->position.z += 1 * cameraSpeed;
             }
 
             if (inputManager.keyboard.keys[SDL_SCANCODE_A]) {
-                cameraObject->transform->position.x += 1 * cameraSpeed;
+                cameraObject->transform->position.x -= 1 * cameraSpeed;
             }
             if (inputManager.keyboard.keys[SDL_SCANCODE_D]) {
-                cameraObject->transform->position.x -= 1 * cameraSpeed;
+                cameraObject->transform->position.x += 1 * cameraSpeed;
             }
 
             if (inputManager.keyboard.keys[SDL_SCANCODE_LSHIFT]) {

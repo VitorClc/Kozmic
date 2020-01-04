@@ -72,13 +72,8 @@ void Mesh::Render(Transform* _activeCamera, Transform* _lightPos)
     unsigned int modelLoc = glGetUniformLocation(shader, "model");
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(transformMatrix));
 
-    GLint objectColorLoc = glGetUniformLocation( shader, "objectColor" );
-    GLint lightColorLoc = glGetUniformLocation( shader, "lightColor" );
-    GLint lightPosLoc = glGetUniformLocation( shader, "lightPos" );
+    GLint lightPosLoc = glGetUniformLocation( shader, "light.position" );
     GLint viewPosLoc = glGetUniformLocation( shader, "viewPos" );
-
-    glUniform3f( objectColorLoc, 1.0f, 0.5f, 0.31f );
-    glUniform3f( lightColorLoc, 1.0f, 1.0f, 1.0f );
 
     glUniform3f(lightPosLoc,_lightPos->position.x, 
                             _lightPos->position.y, 
@@ -87,6 +82,27 @@ void Mesh::Render(Transform* _activeCamera, Transform* _lightPos)
     glUniform3f(viewPosLoc, _activeCamera->position.x, 
                             _activeCamera->position.y, 
                             _activeCamera->position.z);
+
+    glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
+    glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
+    glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
+
+    glUniform3f(
+        glGetUniformLocation(shader, "light.ambient"),
+        ambientColor.x, ambientColor.g, ambientColor.b
+    );
+
+    glUniform3f(
+        glGetUniformLocation(shader, "light.diffuse"),
+        diffuseColor.x, diffuseColor.g, diffuseColor.b
+    );
+
+    glUniform3f(glGetUniformLocation(shader, "specular"), 1.0f, 1.0f, 1.0f);
+
+    glUniform3f(glGetUniformLocation(shader, "material.ambient"), material.ambientColor.x, material.ambientColor.y, material.ambientColor.z);
+    glUniform3f(glGetUniformLocation(shader, "material.diffuse"), material.diffuseColor.x, material.diffuseColor.y, material.diffuseColor.z);
+    glUniform3f(glGetUniformLocation(shader, "material.specular"),  material.specularColor.x, material.specularColor.y, material.specularColor.z);
+    glUniform1f(glGetUniformLocation(shader, "material.shininess"), material.shininess);
 
     if(textures.size() != 0){
         texture->Draw();    
@@ -98,6 +114,23 @@ void Mesh::Render(Transform* _activeCamera, Transform* _lightPos)
 }
 
 void Mesh::ProcessModel(aiMesh *mesh, const aiScene *scene){
+
+    aiColor4D ambientColor;
+    aiColor4D diffuseColor;
+    aiColor4D specularColor;
+    float shininess;
+
+    if (AI_SUCCESS == aiGetMaterialColor(scene->mMaterials[mesh->mMaterialIndex], AI_MATKEY_COLOR_AMBIENT, &ambientColor))
+        material.ambientColor = glm::vec3(ambientColor.r, ambientColor.g, ambientColor.b);
+
+    if (AI_SUCCESS == aiGetMaterialColor(scene->mMaterials[mesh->mMaterialIndex], AI_MATKEY_COLOR_DIFFUSE, &diffuseColor))
+        material.diffuseColor = glm::vec3(diffuseColor.r, diffuseColor.g, diffuseColor.b);
+
+    if (AI_SUCCESS == aiGetMaterialColor(scene->mMaterials[mesh->mMaterialIndex], AI_MATKEY_COLOR_SPECULAR, &specularColor))
+        material.specularColor = glm::vec3(specularColor.r, specularColor.g, specularColor.b);
+
+    if (AI_SUCCESS == aiGetMaterialFloat(scene->mMaterials[mesh->mMaterialIndex], AI_MATKEY_SHININESS, &shininess))
+        material.shininess = shininess; 
 
     for ( GLuint i = 0; i < mesh->mNumVertices; i++ )
     {
@@ -124,7 +157,7 @@ void Mesh::ProcessModel(aiMesh *mesh, const aiScene *scene){
         {
             uv = glm::vec2( 0.0f, 0.0f );
         }
-        
+    
         Vertex newVertex(position, uv, normal);
         vertices.push_back( newVertex );
     }

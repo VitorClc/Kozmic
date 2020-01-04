@@ -63,6 +63,7 @@ void GameObject::AddChild(GameObject* _child){
 }
 
 bool GameObject::LoadModel(const char* path, GLuint shader){
+    transform->scale.x = -1;
     Assimp::Importer importer;
     const aiScene *scene = importer.ReadFile( path, 
         aiProcess_Triangulate | 
@@ -94,8 +95,8 @@ void GameObject::ProcessNode(aiNode* node, const aiScene* scene, GLuint shader){
 
         //CHANGE TRANSFORM
         childNode->transform->position = glm::vec3(nodePos.x, nodePos.z, nodePos.y);
-        childNode->transform->rotation = glm::vec3(nodeRot.x, nodeRot.y, nodeRot.z);
-        childNode->transform->scale = glm::vec3(nodeScale.x, nodeScale.y, nodeScale.z);
+        childNode->transform->rotation = glm::vec3(nodeRot.x, nodeRot.z, nodeRot.y);
+        childNode->transform->scale = glm::vec3(nodeScale.x, nodeScale.z, nodeScale.y);
 
         Mesh* childMesh = new Mesh(mesh, scene, shader, childNode->transform);
         childNode->SetMesh(childMesh);

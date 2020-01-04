@@ -21,6 +21,20 @@ const GLchar *vertexShaderSource = "#version 330 core\n"
 "}";
 
 const GLchar *fragmentShaderSource = "#version 330 core\n"
+"struct Material{\n"
+    "vec3 ambient;\n"
+    "vec3 diffuse;\n"
+    "vec3 specular;\n"
+    "float shininess;\n"
+"};\n"
+
+"struct Light{\n"
+    "vec3 position;\n"
+    "vec3 ambient;\n"
+    "vec3 diffuse;\n"
+    "vec3 specular;\n"
+"};\n"
+
 "out vec4 color;\n"
 
 "in vec3 fragPos;\n"
@@ -29,30 +43,27 @@ const GLchar *fragmentShaderSource = "#version 330 core\n"
 "uniform sampler2D sampler;\n"
 
 "uniform vec3 viewPos;\n"
-"uniform vec3 lightPos;\n"
-"uniform vec3 lightColor;\n"
-"uniform vec3 objectColor;\n"
+"uniform Material material;\n"
+"uniform Light light;\n"
 
 "void main ( )\n"
 "{\n"
 // Ambient
-"float ambientStrength = 0.1f;\n"
-"vec3 ambient = ambientStrength * lightColor;\n"
+"vec3 ambient = light.ambient * material.ambient;\n"
 
 // Diffuse
 "vec3 norm = normalize(Normal);\n"
-"vec3 lightDir = normalize(lightPos - fragPos);\n"
+"vec3 lightDir = normalize(light.position - fragPos);\n"
 "float diff = max(dot(norm, lightDir), 0.0);\n"
-"vec3 diffuse = diff * lightColor;\n"
+"vec3 diffuse = light.diffuse * (diff * material.diffuse);\n"
 
 // Specular
-"float specularStrength = 0.5f;\n"
 "vec3 viewDir = normalize(viewPos - fragPos);\n"
 "vec3 reflectDir = reflect(-lightDir, norm);\n"
-"float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);\n"
-"vec3 specular = specularStrength * spec * lightColor;\n"
+"float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);\n"
+"vec3 specular = light.specular * (spec * material.specular);\n"
 
-"vec3 result = (ambient + diffuse + specular) * objectColor;\n"
+"vec3 result = ambient + diffuse + specular;\n"
 "color = vec4(result, 1.0f);\n"
 "}";
 
