@@ -20,12 +20,17 @@ class GameObject
     
     public:
         Transform* transform;
-        
+        Mesh* mesh;
+       
         GameObject();
 
         void Start();
 
         void Update();
+
+        void Render();
+
+        void SetMesh(Mesh* mesh);
 
         void AddComponent(Component* component);
 

@@ -5,7 +5,7 @@ Mesh::Mesh(
     std::vector<unsigned int> _indices, 
     GLuint _shader, 
     Transform* _transform
-) : Component()
+)
 {
     vertices = _vertices;
     indices = _indices;
@@ -57,7 +57,7 @@ void Mesh::Start(){
     glBindVertexArray(0);
 }
 
-void Mesh::Update()
+void Mesh::Render()
 {
     glm::mat4 transformMatrix = glm::mat4(1.0f);
 

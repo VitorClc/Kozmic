@@ -13,12 +13,14 @@ void Scene::Start(){
 void Scene::Update(){
     for(unsigned int i = 0; i < gameObjects.size(); i++){
         gameObjects[i]->Update();
-        Render();
     } 
 }
 
 void Scene::Render(){
-    activeCamera->Update();
+    for(unsigned int i = 0; i < gameObjects.size(); i++){
+        gameObjects[i]->Render();
+        activeCamera->Update();
+    } 
 }
 
 void Scene::AddGameObject(GameObject* _gameObject){

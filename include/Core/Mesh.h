@@ -56,7 +56,7 @@ class Vertex {
         };
 };
 
-class Mesh : public Component{
+class Mesh{
     public:
         Mesh(
             std::vector<Vertex> _vertices, 
@@ -79,7 +79,7 @@ class Mesh : public Component{
         void ProcessModel(aiMesh *mesh, const aiScene *scene);
 
         void Start();
-        void Update();
+        void Render();
 
     private:
         GLuint shader;

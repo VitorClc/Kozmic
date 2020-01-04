@@ -3,12 +3,20 @@
 GameObject::GameObject(){
     transform = new Transform();
     AddComponent(transform);
+
+    mesh = NULL;
 }
 
 void GameObject::Start(){
+    //START COMPONENTS
     for(unsigned int i = 0; i < components.size(); i++){
         components[i]->Start();
     }     
+
+    //IF HAS MESH, START IT
+    if(mesh != NULL){
+        mesh->Start();
+    }
 
     //START CHILDREN
     for(unsigned int i = 0; i < children.size(); i++){
@@ -27,8 +35,26 @@ void GameObject::Update(){
     }
 }
 
+void GameObject::Render(){
+    //IF HAS MESH, RENDER IT
+    if(mesh != NULL){
+        mesh->Render();
+    }
+
+    //RENDER CHILDREN MESHES
+    for(unsigned int i = 0; i < children.size(); i++){
+        if(children[i]->mesh != NULL){
+            children[i]->mesh->Render();
+        }
+    }
+}
+
 void GameObject::AddComponent(Component* component){
     components.push_back(component);
+}
+
+void GameObject::SetMesh(Mesh* _mesh){
+    mesh = _mesh;
 }
 
 void GameObject::AddChild(GameObject* _child){
@@ -72,7 +98,7 @@ void GameObject::ProcessNode(aiNode* node, const aiScene* scene, GLuint shader){
         childNode->transform->scale = glm::vec3(nodeScale.x, nodeScale.y, nodeScale.z);
 
         Mesh* childMesh = new Mesh(mesh, scene, shader, childNode->transform);
-        childNode->AddComponent(childMesh);
+        childNode->SetMesh(childMesh);
         AddChild(childNode);
     }
 
