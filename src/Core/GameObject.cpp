@@ -62,10 +62,14 @@ void GameObject::AddChild(GameObject* _child){
     _child->transform->SetParent(this->transform);
 }
 
-bool GameObject::LoadModel(const char* path, GLuint shader){
+bool GameObject::LoadModel(const char* filename, GLuint shader){
     transform->scale.x = -1;
     Assimp::Importer importer;
-    const aiScene *scene = importer.ReadFile( path, 
+
+    std::string completePath = "resources/models/";
+    completePath += filename;
+
+    const aiScene *scene = importer.ReadFile(completePath, 
         aiProcess_Triangulate | 
         aiProcess_FlipUVs |
         aiProcess_JoinIdenticalVertices);

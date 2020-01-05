@@ -20,7 +20,10 @@ class Texture{
         Texture(const char* filename){
             int width, height, numComponents;
 
-            unsigned char* data = stbi_load(filename, &width, &height, &numComponents, 4);        
+            std::string completePath = "resources/textures/";
+            completePath += filename;
+
+            unsigned char* data = stbi_load(completePath.c_str(), &width, &height, &numComponents, 4);        
 
             glGenTextures(1, &textureID);
             glBindTexture(GL_TEXTURE_2D, textureID);
@@ -49,8 +52,8 @@ class Material{
         glm::vec3 ambientColor = glm::vec3(0.0,0.0,0.0);
         glm::vec3 diffuseColor = glm::vec3(1.0,1.0,1.0);
         glm::vec3 specularColor = glm::vec3(1.0f, 1.0f, 1.0f);
-        Texture diffuseTexture = Texture("diffuseTest.png");
-        Texture specularTexture = Texture("specularTest.png");
+        Texture diffuseTexture = Texture("diffuse/diffuseTest.png");
+        Texture specularTexture = Texture("specular/specularTest.png");
         float shininess = 32.0f;
 
         void DrawDiffuse(){
