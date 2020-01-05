@@ -38,12 +38,14 @@ class TestScene : public Scene
             cameraObject->transform->rotation.y = -90;
             Camera* cameraComponent = new Camera(shaders, cameraObject->transform);
             cameraObject->AddComponent(cameraComponent);
+            cameraObject->transform->position.y = 7;
+            cameraObject->transform->position.z = 10;
 
             AddCamera(cameraObject);
             activeCamera = cameras[0];
 
             GameObject* test = new GameObject();
-            test->LoadModel("monkey.dae", shader.GetID());
+            test->LoadModel("test.dae", shader.GetID());
 
             light = new GameObject();
             light->LoadModel("test.dae", shader2.GetID());
@@ -57,6 +59,8 @@ class TestScene : public Scene
         }
 
         void ProcessInputs(InputManager inputManager, double deltaTime){
+            movSpeed = 10.0f * deltaTime;
+
             float xpos = inputManager.mouse.yPosition;
             float ypos = inputManager.mouse.xPosition;
 
@@ -71,30 +75,34 @@ class TestScene : public Scene
             if(SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT)){
                 cameraObject->transform->rotation.x += xoffset;
                 cameraObject->transform->rotation.y += yoffset;
-            }
-            cameraSpeed = 2.0f * deltaTime;
-            movSpeed = 2.0f * deltaTime;
 
-            if (inputManager.keyboard.keys[SDL_SCANCODE_W]) {
-                cameraObject->transform->position.z -= 1 * cameraSpeed;
-            }
-            if (inputManager.keyboard.keys[SDL_SCANCODE_S]) {
-                cameraObject->transform->position.z += 1 * cameraSpeed;
-            }
+                if (inputManager.keyboard.keys[SDL_SCANCODE_W]) {
+                    cameraObject->transform->position += cameraObject->transform->front * cameraSpeed;
+                }
+                if (inputManager.keyboard.keys[SDL_SCANCODE_S]) {
+                    cameraObject->transform->position -= cameraObject->transform->front * cameraSpeed;
+                }
 
-            if (inputManager.keyboard.keys[SDL_SCANCODE_A]) {
-                cameraObject->transform->position.x -= 1 * cameraSpeed;
-            }
-            if (inputManager.keyboard.keys[SDL_SCANCODE_D]) {
-                cameraObject->transform->position.x += 1 * cameraSpeed;
-            }
+                if (inputManager.keyboard.keys[SDL_SCANCODE_A]) {
+                    cameraObject->transform->position -= cameraObject->transform->right * cameraSpeed;
+                }
+                if (inputManager.keyboard.keys[SDL_SCANCODE_D]) {
+                    cameraObject->transform->position += cameraObject->transform->right * cameraSpeed;
+                }
 
-            if (inputManager.keyboard.keys[SDL_SCANCODE_LSHIFT]) {
-                cameraObject->transform->position.y += 1 * cameraSpeed;
-            }
-            if (inputManager.keyboard.keys[SDL_SCANCODE_LCTRL]) {
-                cameraObject->transform->position.y -= 1 * cameraSpeed;
-            }
+                if (inputManager.keyboard.keys[SDL_SCANCODE_SPACE]) {
+                    cameraObject->transform->position.y += 1 * cameraSpeed;
+                }
+                if (inputManager.keyboard.keys[SDL_SCANCODE_LCTRL]) {
+                    cameraObject->transform->position.y -= 1 * cameraSpeed;
+                }
+
+                if (inputManager.keyboard.keys[SDL_SCANCODE_LSHIFT]) {
+                    cameraSpeed = 10.0f * deltaTime;
+                }else{
+                    cameraSpeed = 5.0f * deltaTime;
+                }
+            }    
 
             //COntrol light
             if (inputManager.keyboard.keys[SDL_SCANCODE_UP]) {
@@ -112,10 +120,10 @@ class TestScene : public Scene
             }
             
             if (inputManager.keyboard.keys[SDL_SCANCODE_RSHIFT]) {
-                light->transform->position.y += 1 * cameraSpeed;
+                light->transform->position.y += 1 * movSpeed;
             }
             if (inputManager.keyboard.keys[SDL_SCANCODE_RCTRL]) {
-                light->transform->position.y -= 1 * cameraSpeed;
-            }
+                light->transform->position.y -= 1 * movSpeed;
+            }   
         }
 };

@@ -18,13 +18,13 @@ const GLchar *vertexShaderSource = "#version 330 core\n"
 "gl_Position = projection * view * model * vec4( position, 1.0 );\n"
 "fragPos = vec3(model * vec4(position, 1.0f));\n"
 "Normal = mat3(transpose(inverse(model))) * normal;\n"
+"texCoord = uv;\n"
 "}";
 
 const GLchar *fragmentShaderSource = "#version 330 core\n"
 "struct Material{\n"
-    "vec3 ambient;\n"
-    "vec3 diffuse;\n"
-    "vec3 specular;\n"
+    "sampler2D diffuse;\n"
+    "sampler2D specular;\n"
     "float shininess;\n"
 "};\n"
 
@@ -39,8 +39,7 @@ const GLchar *fragmentShaderSource = "#version 330 core\n"
 
 "in vec3 fragPos;\n"
 "in vec3 Normal;\n"
-
-"uniform sampler2D sampler;\n"
+"in vec2 texCoord;\n"
 
 "uniform vec3 viewPos;\n"
 "uniform Material material;\n"
@@ -49,22 +48,21 @@ const GLchar *fragmentShaderSource = "#version 330 core\n"
 "void main ( )\n"
 "{\n"
 // Ambient
-"vec3 ambient = light.ambient * material.ambient;\n"
+"vec3 ambient = light.ambient * vec3(texture(material.diffuse, texCoord));\n"
 
 // Diffuse
 "vec3 norm = normalize(Normal);\n"
 "vec3 lightDir = normalize(light.position - fragPos);\n"
 "float diff = max(dot(norm, lightDir), 0.0);\n"
-"vec3 diffuse = light.diffuse * (diff * material.diffuse);\n"
+"vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse, texCoord));\n"
 
 // Specular
 "vec3 viewDir = normalize(viewPos - fragPos);\n"
 "vec3 reflectDir = reflect(-lightDir, norm);\n"
 "float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);\n"
-"vec3 specular = light.specular * (spec * material.specular);\n"
+"vec3 specular = light.specular * spec * vec3(texture(material.specular, texCoord));\n"
 
-"vec3 result = ambient + diffuse + specular;\n"
-"color = vec4(result, 1.0f);\n"
+"color = vec4(ambient + diffuse + specular, 1.0f);\n"
 "}";
 
 const GLchar *lampVS = "#version 330 core\n"

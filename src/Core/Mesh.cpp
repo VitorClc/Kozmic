@@ -25,10 +25,6 @@ Mesh::Mesh(
     transform = _transform;
 }
 
-void Mesh::AddTexture(const char* filename){
-    texture = new Texture(filename);
-}
-
 void Mesh::Start(){
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -55,6 +51,10 @@ void Mesh::Start(){
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
     
     glBindVertexArray(0);
+
+    glUseProgram(shader);   
+    glUniform1i( glGetUniformLocation( shader, "material.diffuse" ),  0 );
+    glUniform1i( glGetUniformLocation( shader, "material.specular" ),  1 );
 }
 
 void Mesh::Render(Transform* _activeCamera, Transform* _lightPos)
@@ -83,30 +83,19 @@ void Mesh::Render(Transform* _activeCamera, Transform* _lightPos)
                             _activeCamera->position.y, 
                             _activeCamera->position.z);
 
-    glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
-    glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
-    glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
+    glUniform3f(glGetUniformLocation(shader, "light.ambient"), 0.2f,0.2f,0.2f);
+    glUniform3f(glGetUniformLocation(shader, "light.diffuse"), 0.5f,0.5f,0.5f);
+    glUniform3f(glGetUniformLocation(shader, "light.specular"), 1.0f,1.0f,1.0f);
+ 
+    //glUniform3f(glGetUniformLocation(shader, "specular"), 1.0f, 1.0f, 1.0f);
+    //glUniform3f(glGetUniformLocation(shader, "material.ambient"), material.ambientColor.x, material.ambientColor.y, material.ambientColor.z);
+    //glUniform3f(glGetUniformLocation(shader, "material.diffuse"), material.diffuseColor.x, material.diffuseColor.y, material.diffuseColor.z);
+    //glUniform3f(glGetUniformLocation(shader, "material.specular"),  material.specularColor.x, material.specularColor.y, material.specularColor.z);
+    
+    glUniform1f(glGetUniformLocation(shader, "material.shininess"), 32.0f);
 
-    glUniform3f(
-        glGetUniformLocation(shader, "light.ambient"),
-        ambientColor.x, ambientColor.g, ambientColor.b
-    );
-
-    glUniform3f(
-        glGetUniformLocation(shader, "light.diffuse"),
-        diffuseColor.x, diffuseColor.g, diffuseColor.b
-    );
-
-    glUniform3f(glGetUniformLocation(shader, "specular"), 1.0f, 1.0f, 1.0f);
-
-    glUniform3f(glGetUniformLocation(shader, "material.ambient"), material.ambientColor.x, material.ambientColor.y, material.ambientColor.z);
-    glUniform3f(glGetUniformLocation(shader, "material.diffuse"), material.diffuseColor.x, material.diffuseColor.y, material.diffuseColor.z);
-    glUniform3f(glGetUniformLocation(shader, "material.specular"),  material.specularColor.x, material.specularColor.y, material.specularColor.z);
-    glUniform1f(glGetUniformLocation(shader, "material.shininess"), material.shininess);
-
-    if(textures.size() != 0){
-        texture->Draw();    
-    }
+    material.DrawDiffuse();
+    material.DrawSpecular();
 
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
@@ -128,9 +117,6 @@ void Mesh::ProcessModel(aiMesh *mesh, const aiScene *scene){
 
     if (AI_SUCCESS == aiGetMaterialColor(scene->mMaterials[mesh->mMaterialIndex], AI_MATKEY_COLOR_SPECULAR, &specularColor))
         material.specularColor = glm::vec3(specularColor.r, specularColor.g, specularColor.b);
-
-    if (AI_SUCCESS == aiGetMaterialFloat(scene->mMaterials[mesh->mMaterialIndex], AI_MATKEY_SHININESS, &shininess))
-        material.shininess = shininess; 
 
     for ( GLuint i = 0; i < mesh->mNumVertices; i++ )
     {

@@ -15,16 +15,6 @@
 
 #include <assimp/scene.h>
 
-class Material{
-    public:
-        Material(){};
-
-        glm::vec3 ambientColor = glm::vec3(0.0,0.0,0.0);
-        glm::vec3 diffuseColor = glm::vec3(1.0,1.0,1.0);
-        glm::vec3 specularColor = glm::vec3(1.0f, 1.0f, 1.0f);
-        float shininess = 32.0f;
-};
-
 class Texture{
     public:
         Texture(const char* filename){
@@ -44,13 +34,34 @@ class Texture{
             stbi_image_free(data);
         }
         
-        void Draw(){
-            glActiveTexture(GL_TEXTURE);
-            glBindTexture(GL_TEXTURE_2D, textureID);
+        GLuint GetID(){
+            return textureID;
         }
     
     private:
         GLuint textureID;
+};
+
+class Material{
+    public:
+        Material(){};
+
+        glm::vec3 ambientColor = glm::vec3(0.0,0.0,0.0);
+        glm::vec3 diffuseColor = glm::vec3(1.0,1.0,1.0);
+        glm::vec3 specularColor = glm::vec3(1.0f, 1.0f, 1.0f);
+        Texture diffuseTexture = Texture("diffuseTest.png");
+        Texture specularTexture = Texture("specularTest.png");
+        float shininess = 32.0f;
+
+        void DrawDiffuse(){
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, diffuseTexture.GetID());
+        }
+
+        void DrawSpecular(){
+            glActiveTexture(GL_TEXTURE1);
+            glBindTexture(GL_TEXTURE_2D, specularTexture.GetID());
+        }
 };
 
 class Vertex {
@@ -84,8 +95,6 @@ class Mesh{
 
         ~Mesh();
 
-        void AddTexture(const char* filename);
-
         void ProcessModel(aiMesh *mesh, const aiScene *scene);
 
         void Start();
@@ -98,8 +107,6 @@ class Mesh{
         unsigned int VAO, VBO, EBO, textureBuffer;
         std::vector<Vertex> vertices;
         std::vector<unsigned int> indices;
-        std::vector<Texture> textures;
         
-        Texture* texture;
         Material material = Material();
 };  
