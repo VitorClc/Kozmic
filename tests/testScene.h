@@ -34,24 +34,24 @@ class TestScene : public Scene
             shaders.push_back(shader2.GetID());
 
             cameraObject = new GameObject();
-            cameraObject->transform->position.z = 7;
-            cameraObject->transform->rotation.y = -90;
+            cameraObject->transform->position.z = -7;
+            cameraObject->transform->position.y = 3;
+            cameraObject->transform->rotation.y = 90;
+            cameraObject->transform->rotation.x = -30;
             Camera* cameraComponent = new Camera(shaders, cameraObject->transform);
             cameraObject->AddComponent(cameraComponent);
-            cameraObject->transform->position.y = 7;
-            cameraObject->transform->position.z = 10;
 
             AddCamera(cameraObject);
             activeCamera = cameras[0];
 
             GameObject* test = new GameObject();
-            test->LoadModel("test.dae", shader.GetID());
+            test->LoadModel("test2.obj", shader.GetID());
 
             light = new GameObject();
             light->LoadModel("test.dae", shader2.GetID());
             light->transform->position.x = 3;
             light->transform->position.y = 8;
-            light->transform->position.z = 4;
+            light->transform->position.z = -4;
             light->transform->scale = glm::vec3(0.5,0.5,0.5);
             
             AddGameObject(light);

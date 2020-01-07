@@ -23,7 +23,7 @@ class Transform : public Component
         glm::vec3 right = glm::vec3(1.0, 0.0, 0.0 );
         
         Transform(
-            glm::vec3 _position = glm::vec3(0.0, 0.0f, 0.0f), 
+            glm::vec3 _position = glm::vec3(0.0f, 0.0f, 0.0f), 
             glm::vec3 _rotation = glm::vec3(0.0f, 0.0f, 0.0f), 
             glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 1.0f)
         );

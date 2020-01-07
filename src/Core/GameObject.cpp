@@ -63,7 +63,6 @@ void GameObject::AddChild(GameObject* _child){
 }
 
 bool GameObject::LoadModel(const char* filename, GLuint shader){
-    transform->scale.x = -1;
     Assimp::Importer importer;
 
     std::string completePath = "resources/models/";
@@ -98,9 +97,9 @@ void GameObject::ProcessNode(aiNode* node, const aiScene* scene, GLuint shader){
         GameObject* childNode = new GameObject();
 
         //CHANGE TRANSFORM
-        childNode->transform->position = glm::vec3(nodePos.x, nodePos.z, nodePos.y);
-        childNode->transform->rotation = glm::vec3(nodeRot.x, nodeRot.z, nodeRot.y);
-        childNode->transform->scale = glm::vec3(nodeScale.x, nodeScale.z, nodeScale.y);
+        childNode->transform->position = glm::vec3(nodePos.x, nodePos.y, nodePos.z);
+        childNode->transform->rotation = glm::vec3(nodeRot.x, nodeRot.y, nodeRot.z);
+        childNode->transform->scale = glm::vec3(nodeScale.x, nodeScale.y, nodeScale.z);
 
         Mesh* childMesh = new Mesh(mesh, scene, shader, childNode->transform);
         childNode->SetMesh(childMesh);

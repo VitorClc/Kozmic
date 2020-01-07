@@ -17,7 +17,14 @@
 
 class Texture{
     public:
+        Texture(){
+        }
+
         Texture(const char* filename){
+            SetTexture(filename);
+        }
+        
+        void SetTexture(const char* filename){
             int width, height, numComponents;
 
             std::string completePath = "resources/textures/";
@@ -34,9 +41,9 @@ class Texture{
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-            stbi_image_free(data);
+            stbi_image_free(data);            
         }
-        
+
         GLuint GetID(){
             return textureID;
         }
@@ -52,8 +59,8 @@ class Material{
         glm::vec3 ambientColor = glm::vec3(0.0,0.0,0.0);
         glm::vec3 diffuseColor = glm::vec3(1.0,1.0,1.0);
         glm::vec3 specularColor = glm::vec3(1.0f, 1.0f, 1.0f);
-        Texture diffuseTexture = Texture("diffuse/diffuseTest.png");
-        Texture specularTexture = Texture("specular/specularTest.png");
+        Texture diffuseTexture = Texture();
+        Texture specularTexture = Texture();
         float shininess = 32.0f;
 
         void DrawDiffuse(){
@@ -65,6 +72,9 @@ class Material{
             glActiveTexture(GL_TEXTURE1);
             glBindTexture(GL_TEXTURE_2D, specularTexture.GetID());
         }
+
+        bool hasDiffuseTexture = false;
+        bool hasSpecularTexture = false;
 };
 
 class Vertex {

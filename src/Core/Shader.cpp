@@ -23,8 +23,13 @@ const GLchar *vertexShaderSource = "#version 330 core\n"
 
 const GLchar *fragmentShaderSource = "#version 330 core\n"
 "struct Material{\n"
-    "sampler2D diffuse;\n"
-    "sampler2D specular;\n"
+    "vec3 ambient;\n"
+    "vec3 diffuse;\n"
+    "vec3 specular;\n"
+    "sampler2D diffuseTexture;\n"
+    "int hasDiffuseTexture;\n"
+    "sampler2D specularTexture;\n"
+    "int hasSpecularTexture;\n"
     "float shininess;\n"
 "};\n"
 
@@ -45,24 +50,40 @@ const GLchar *fragmentShaderSource = "#version 330 core\n"
 "uniform Material material;\n"
 "uniform Light light;\n"
 
+"vec3 ambientResult;\n"
+"vec3 diffuseResult;\n"
+"vec3 specularResult;\n"
+
 "void main ( )\n"
 "{\n"
 // Ambient
-"vec3 ambient = light.ambient * vec3(texture(material.diffuse, texCoord));\n"
+"if(material.hasDiffuseTexture == 1){\n"
+"ambientResult = light.ambient * vec3(texture(material.diffuseTexture, texCoord));\n"
+"}else if(material.hasDiffuseTexture == 0){\n"
+"ambientResult = light.ambient * material.ambient;\n"
+"}\n"
 
 // Diffuse
 "vec3 norm = normalize(Normal);\n"
 "vec3 lightDir = normalize(light.position - fragPos);\n"
 "float diff = max(dot(norm, lightDir), 0.0);\n"
-"vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse, texCoord));\n"
+"diffuseResult = light.diffuse * diff * material.diffuse;\n"
 
 // Specular
 "vec3 viewDir = normalize(viewPos - fragPos);\n"
 "vec3 reflectDir = reflect(-lightDir, norm);\n"
 "float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);\n"
-"vec3 specular = light.specular * spec * vec3(texture(material.specular, texCoord));\n"
+"if(material.hasSpecularTexture == 1){\n"
+"specularResult = light.specular * spec * vec3(texture(material.specularTexture, texCoord));\n"
+"}else if(material.hasSpecularTexture == 0){\n"
+"specularResult = light.specular * spec * material.specular;\n"
+"}\n"
 
-"color = vec4(ambient + diffuse + specular, 1.0f);\n"
+"if(material.hasDiffuseTexture == 1){\n"
+"color = texture(material.diffuseTexture, texCoord) * vec4(ambientResult + diffuseResult + specularResult, 1.0f);\n"
+"}else{\n"
+"color = vec4(ambientResult + diffuseResult + specularResult, 1.0f);"
+"}\n"
 "}";
 
 const GLchar *lampVS = "#version 330 core\n"
