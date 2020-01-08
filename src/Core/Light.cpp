@@ -21,31 +21,46 @@ LightComponent::LightComponent(GLuint _shader, Transform* _transform, int _type)
 void LightComponent::Update(){
     GLint lightPosLoc;
     GLint lightDirLoc;
-
+    
     //UPDATE LIGHT POSITION IF IS A SPOTLIGHT
     switch (type)
     {
         case 1:
-            lightPosLoc = glGetUniformLocation( shader, "lightSource.position" );
-            
+            lightPosLoc = glGetUniformLocation( shader, GetLightUniform("position"));
+
             glUniform3f(lightPosLoc,transform->position.x, 
                                     transform->position.y, 
                                     transform->position.z);
             break;
 
         case 2:
-            lightDirLoc = glGetUniformLocation( shader, "lightSource.direction" );
+            //lightDirLoc = glGetUniformLocation( shader, "pointLightSource.direction" );
             
-            glUniform3f(lightDirLoc,transform->rotation.x, 
-                                    transform->rotation.y, 
-                                    transform->rotation.z);    
+            //glUniform3f(lightDirLoc,transform->rotation.x, 
+            //                        transform->rotation.y, 
+            //                        transform->rotation.z);    
             break;
 
         default:
             break;
     }
 
-    glUniform3f(glGetUniformLocation(shader, "lightSource.ambient"), 0.3f,0.3f,0.3f);
-    glUniform3f(glGetUniformLocation(shader, "lightSource.diffuse"), 0.5f,0.5f,0.5f);
-    glUniform3f(glGetUniformLocation(shader, "lightSource.specular"), 1.0f,1.0f,1.0f);
+    glUniform3f(glGetUniformLocation(shader, GetLightUniform("ambient")), ambient.r, ambient.g, ambient.b);
+    glUniform3f(glGetUniformLocation(shader, GetLightUniform("diffuse")), diffuse.r, diffuse.g, diffuse.b);
+    glUniform3f(glGetUniformLocation(shader, GetLightUniform("specular")), specular.r, specular.g, specular.b);
+}
+
+const char* LightComponent::GetLightUniform(const char* _data){
+    std::string lightID = "pointLightSources[";
+    lightID += std::to_string(id);
+    lightID += "]";
+    
+    std::string lightData = ".";
+    lightData += _data;
+
+    std::string completeAccess;
+    completeAccess += lightID.c_str();
+    completeAccess += lightData.c_str();
+
+    return completeAccess.c_str();
 }

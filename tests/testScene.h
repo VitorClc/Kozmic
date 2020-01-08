@@ -19,13 +19,8 @@ class TestScene : public Scene
 
     float sensitivity = 0.1;
 
-
     public:
-        GameObject* light;
-
         TestScene(){
-            std::vector<GLuint> shaders;
-
             Shader shader = Shader("basic.vert", "basic.frag");
             shaders.push_back(shader.GetID());
 
@@ -43,19 +38,15 @@ class TestScene : public Scene
             AddCamera(cameraObject);
             activeCamera = cameras[0];
 
-            GameObject* test = new GameObject();
-            test->LoadModel("test2.obj", shader.GetID());
-
-            light = new GameObject();
-            light->LoadModel("test.dae", shader2.GetID());
+            GameObject* light = new GameObject();
             LightComponent* lightComponent = new LightComponent(shader.GetID(), light->transform, 1);
             light->AddComponent(lightComponent);
-            light->transform->position.x = 3;
-            light->transform->position.y = 8;
-            light->transform->position.z = -4;
+            light->transform->position = glm::vec3(0.0, 3.0, 3.0);
             light->transform->scale = glm::vec3(0.5,0.5,0.5);
-            
-            AddGameObject(light);
+            AddPointLight(light, lightComponent);
+
+            GameObject* test = new GameObject();
+            test->LoadModel("testScene.obj", shader.GetID());
             AddGameObject(test);
         }
 
@@ -107,24 +98,24 @@ class TestScene : public Scene
 
             //COntrol light
             if (inputManager.keyboard.keys[SDL_SCANCODE_UP]) {
-                light->transform->position.z += 1 * movSpeed;
+                pointLights[0]->transform->position.z += 1 * movSpeed;
             }
             if (inputManager.keyboard.keys[SDL_SCANCODE_DOWN]) {
-                light->transform->position.z -= 1 * movSpeed;
+                pointLights[0]->transform->position.z -= 1 * movSpeed;
             }
 
             if (inputManager.keyboard.keys[SDL_SCANCODE_LEFT]) {
-                light->transform->position.x += 1 * movSpeed;
+                pointLights[0]->transform->position.x += 1 * movSpeed;
             }
             if (inputManager.keyboard.keys[SDL_SCANCODE_RIGHT]) {
-                light->transform->position.x -= 1 * movSpeed;
+                pointLights[0]->transform->position.x -= 1 * movSpeed;
             }
             
             if (inputManager.keyboard.keys[SDL_SCANCODE_RSHIFT]) {
-                light->transform->position.y += 1 * movSpeed;
+                pointLights[0]->transform->position.y += 1 * movSpeed;
             }
             if (inputManager.keyboard.keys[SDL_SCANCODE_RCTRL]) {
-                light->transform->position.y -= 1 * movSpeed;
-            }   
+                pointLights[0]->transform->position.y -= 1 * movSpeed;
+            }
         }
 };

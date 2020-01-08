@@ -1,4 +1,7 @@
 #version 330 core
+
+#define MAX_POINT_LIGHTS 10
+
 struct Material{
     vec3 ambient;
     vec3 diffuse;
@@ -37,8 +40,11 @@ in vec3 Normal;
 in vec2 texCoord;
 
 uniform vec3 viewPos;
+
+uniform int pointLightCount;
+uniform PointLight[MAX_POINT_LIGHTS] pointLightSources;
+
 uniform Material material;
-uniform PointLight lightSource;
 
 vec3 CalculateDirectionalLight(DirectionalLight _lightSource, vec3 _normal, vec3 _viewDirection){
     vec3 lightDirection = normalize(-_lightSource.direction);
@@ -121,9 +127,13 @@ vec3 CalculatePointLight(PointLight _lightSource, vec3 _normal, vec3 _fragPos, v
 void main ( )
 {
     vec3 normal = normalize(Normal);
-    vec3 viewDirection = normalize(viewPos - fragPos);
+    vec3 viewPosition = normalize(viewPos - fragPos);
 
-    vec3 result = CalculatePointLight(lightSource, normal, fragPos, viewDirection);
+    vec3 result;
+
+    for( int i = 0; i < pointLightCount; i++){
+        result += CalculatePointLight(pointLightSources[i], normal, fragPos, viewPosition);
+    }
 
     color = vec4(result, 1.0);
 }
