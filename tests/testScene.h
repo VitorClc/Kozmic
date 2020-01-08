@@ -25,12 +25,10 @@ class TestScene : public Scene
         TestScene(){
             std::vector<GLuint> shaders;
 
-            Shader shader = Shader();
-            shader.LoadBasic();
+            Shader shader = Shader("basic.vert", "basic.frag");
             shaders.push_back(shader.GetID());
 
-            Shader shader2 = Shader();
-            shader2.LoadLamp();
+            Shader shader2 = Shader("emissive.vert", "emissive.frag");
             shaders.push_back(shader2.GetID());
 
             cameraObject = new GameObject();

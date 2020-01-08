@@ -1,18 +1,19 @@
 #define GLEW_STATIC
 
+#include <fstream>
 #include <iostream>
+#include <sstream>
 #include <GL/glew.h>
 
-//TODO: EXTERNAL SHADER LOAD
 class Shader
 {
     public:
-        void LoadBasic();
-        void LoadLamp();
+        Shader(const char* vertexPath, const char* fragmentPath);
 
         GLuint GetID();
 
     private:
+        void Load(const GLchar* vertexShaderSource, const GLchar* fragmentShaderSource);
         GLuint shaderID;     
 };
 
