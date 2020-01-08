@@ -94,6 +94,10 @@ vec3 CalculatePointLight(PointLight _lightSource, vec3 _normal, vec3 _fragPos, v
     vec3 diffuseResult;
     vec3 specularResult;
 
+    ambientResult  *= attenuation;
+    diffuseResult  *= attenuation;
+    specularResult *= attenuation;
+    
     //CHECK IF THE MATERIAL HAS A DIFFUSE TEXTURE OR JUST A DIFFUSE COLOR
     if(material.hasDiffuseTexture == 1){
         ambientResult = _lightSource.ambient * vec3(texture(material.diffuseTexture, texCoord));
@@ -110,10 +114,6 @@ vec3 CalculatePointLight(PointLight _lightSource, vec3 _normal, vec3 _fragPos, v
     }else if(material.hasSpecularTexture == 0){
         specularResult = _lightSource.specular * specularCalc * material.specular;
     }
-
-    ambientResult  *= attenuation;
-    diffuseResult  *= attenuation;
-    specularResult *= attenuation;
 
     return (ambientResult + diffuseResult + specularResult);
 }

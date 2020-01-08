@@ -10,6 +10,7 @@ set (SOURCES
     Transform.cpp
     Scene.cpp
     ScriptBase.cpp
+    Light.cpp
 )
 
 set (INCLUDES 
@@ -23,6 +24,7 @@ set (INCLUDES
     ${INCLUDE_DIR}/Scene.h
     ${INCLUDE_DIR}/ScriptBase.h
     ${INCLUDE_DIR}/InputManager.h
+    ${INCLUDE_DIR}/Light.h
 )
 
 add_library(Core STATIC ${SOURCES} ${INCLUDES})

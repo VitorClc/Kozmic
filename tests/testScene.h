@@ -6,6 +6,7 @@
 #include <GameObject.h>
 #include <Camera.h>
 #include <ScriptBase.h>
+#include <Light.h>
 
 class TestScene : public Scene
 {
@@ -47,6 +48,8 @@ class TestScene : public Scene
 
             light = new GameObject();
             light->LoadModel("test.dae", shader2.GetID());
+            LightComponent* lightComponent = new LightComponent(shader.GetID(), light->transform, 1);
+            light->AddComponent(lightComponent);
             light->transform->position.x = 3;
             light->transform->position.y = 8;
             light->transform->position.z = -4;
@@ -57,7 +60,7 @@ class TestScene : public Scene
         }
 
         void ProcessInputs(InputManager inputManager, double deltaTime){
-            movSpeed = 1.0f * deltaTime;
+            movSpeed = 10.0f * deltaTime;
 
             float xpos = inputManager.mouse.yPosition;
             float ypos = inputManager.mouse.xPosition;
