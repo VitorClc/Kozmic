@@ -53,6 +53,10 @@ void Mesh::Start(){
     glBindVertexArray(0);
 
     glUseProgram(shader);   
+    glUniform1f( glGetUniformLocation( shader, "lightSource.constant"),  1.0f);
+    glUniform1f( glGetUniformLocation( shader, "lightSource.linear"),  1.0f);
+    glUniform1f( glGetUniformLocation( shader, "lightSource.quadratic"),  1.0f);
+
     glUniform1i( glGetUniformLocation( shader, "material.diffuseTexture" ),  0 );
     glUniform1i( glGetUniformLocation( shader, "material.specularTexture" ),  1 );
 }
@@ -72,10 +76,10 @@ void Mesh::Render(Transform* _activeCamera, Transform* _lightPos)
     unsigned int modelLoc = glGetUniformLocation(shader, "model");
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(transformMatrix));
 
-    GLint lightPosLoc = glGetUniformLocation( shader, "light.position" );
+    GLint lightDirLoc = glGetUniformLocation( shader, "lightSource.position" );
     GLint viewPosLoc = glGetUniformLocation( shader, "viewPos" );
 
-    glUniform3f(lightPosLoc,_lightPos->position.x, 
+    glUniform3f(lightDirLoc,_lightPos->position.x, 
                             _lightPos->position.y, 
                             _lightPos->position.z);
 
@@ -83,9 +87,9 @@ void Mesh::Render(Transform* _activeCamera, Transform* _lightPos)
                             _activeCamera->position.y, 
                             _activeCamera->position.z);
 
-    glUniform3f(glGetUniformLocation(shader, "light.ambient"), 0.3f,0.3f,0.3f);
-    glUniform3f(glGetUniformLocation(shader, "light.diffuse"), 0.5f,0.5f,0.5f);
-    glUniform3f(glGetUniformLocation(shader, "light.specular"), 1.0f,1.0f,1.0f);
+    glUniform3f(glGetUniformLocation(shader, "lightSource.ambient"), 0.3f,0.3f,0.3f);
+    glUniform3f(glGetUniformLocation(shader, "lightSource.diffuse"), 0.5f,0.5f,0.5f);
+    glUniform3f(glGetUniformLocation(shader, "lightSource.specular"), 1.0f,1.0f,1.0f);
  
     if(material.hasDiffuseTexture == true){
         glUniform1i(glGetUniformLocation(shader, "material.hasDiffuseTexture"), 1);

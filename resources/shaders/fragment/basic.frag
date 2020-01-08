@@ -10,12 +10,25 @@ struct Material{
     float shininess;
 };
 
-struct Light{
-    vec3 position;
+struct DirectionalLight {
+    vec3 direction;
+  
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
-};
+};  
+
+struct PointLight {    
+    vec3 position;
+    
+    float constant;
+    float linear;
+    float quadratic;  
+
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+};  
 
 out vec4 color;
 
@@ -25,42 +38,92 @@ in vec2 texCoord;
 
 uniform vec3 viewPos;
 uniform Material material;
-uniform Light light;
+uniform PointLight lightSource;
 
-vec3 ambientResult;
-vec3 diffuseResult;
-vec3 specularResult;
+vec3 CalculateDirectionalLight(DirectionalLight _lightSource, vec3 _normal, vec3 _viewDirection){
+    vec3 lightDirection = normalize(-_lightSource.direction);
+
+    //DIFFUSE CALCULATION
+    float diffuseCalc = max(dot(_normal, lightDirection), 0.0);
+
+    //SPECULAR CALCULATION
+    vec3 reflectDiretion = reflect(-lightDirection, _normal);
+    float specularCalc = pow(max(dot(_viewDirection, reflectDiretion), 0.0), material.shininess);
+
+    //CREATE VARIABLES TO STORE RESULTS OF PHONG SHADER
+    vec3 ambientResult;
+    vec3 diffuseResult;
+    vec3 specularResult;
+
+    //CHECK IF THE MATERIAL HAS A DIFFUSE TEXTURE OR JUST A DIFFUSE COLOR
+    if(material.hasDiffuseTexture == 1){
+        ambientResult = _lightSource.ambient * vec3(texture(material.diffuseTexture, texCoord));
+        diffuseResult = _lightSource.diffuse * diffuseCalc * vec3(texture(material.diffuseTexture, texCoord));
+    }
+    else{
+        ambientResult = _lightSource.ambient * material.ambient;
+        diffuseResult = _lightSource.diffuse * diffuseCalc * material.diffuse;
+    }
+
+    //CHECK IF THE MATERIAL HAS A SPECULAR TEXTURE OR JUST A SPECULAR COLOR
+    if(material.hasSpecularTexture == 1){
+        specularResult = _lightSource.specular * specularCalc * vec3(texture(material.specularTexture, texCoord));
+    }else if(material.hasSpecularTexture == 0){
+        specularResult = _lightSource.specular * specularCalc * material.specular;
+    }
+
+    return (ambientResult + diffuseResult + specularResult);
+}
+
+vec3 CalculatePointLight(PointLight _lightSource, vec3 _normal, vec3 _fragPos, vec3 _viewDirection){
+    vec3 lightDirection = normalize(_lightSource.position - _fragPos);
+
+    //DIFFUSE CALCULATION
+    float diffuseCalc = max(dot(_normal, lightDirection), 0.0);
+
+    //SPECULAR CALCULATION
+    vec3 reflectDiretion = reflect(-lightDirection, _normal);
+    float specularCalc = pow(max(dot(_viewDirection, reflectDiretion), 0.0), material.shininess);
+
+    //DISTANCE CALC
+    float distance = length(_lightSource.position - _fragPos);
+    float attenuation = 1.0 / (_lightSource.constant + _lightSource.linear * distance + _lightSource.quadratic * (distance * distance));    
+
+    //CREATE VARIABLES TO STORE RESULTS OF PHONG SHADER
+    vec3 ambientResult;
+    vec3 diffuseResult;
+    vec3 specularResult;
+
+    //CHECK IF THE MATERIAL HAS A DIFFUSE TEXTURE OR JUST A DIFFUSE COLOR
+    if(material.hasDiffuseTexture == 1){
+        ambientResult = _lightSource.ambient * vec3(texture(material.diffuseTexture, texCoord));
+        diffuseResult = _lightSource.diffuse * diffuseCalc * vec3(texture(material.diffuseTexture, texCoord));
+    }
+    else{
+        ambientResult = _lightSource.ambient * material.ambient;
+        diffuseResult = _lightSource.diffuse * diffuseCalc * material.diffuse;
+    }
+
+    //CHECK IF THE MATERIAL HAS A SPECULAR TEXTURE OR JUST A SPECULAR COLOR
+    if(material.hasSpecularTexture == 1){
+        specularResult = _lightSource.specular * specularCalc * vec3(texture(material.specularTexture, texCoord));
+    }else if(material.hasSpecularTexture == 0){
+        specularResult = _lightSource.specular * specularCalc * material.specular;
+    }
+
+    ambientResult  *= attenuation;
+    diffuseResult  *= attenuation;
+    specularResult *= attenuation;
+
+    return (ambientResult + diffuseResult + specularResult);
+}
 
 void main ( )
 {
-    // Ambient
-    if(material.hasDiffuseTexture == 1){
-        ambientResult = light.ambient * vec3(texture(material.diffuseTexture, texCoord));
-    }else if(material.hasDiffuseTexture == 0){
-        ambientResult = light.ambient * material.ambient;
-    }
+    vec3 normal = normalize(Normal);
+    vec3 viewDirection = normalize(viewPos - fragPos);
 
-    // Diffuse
-    vec3 norm = normalize(Normal);
-    vec3 lightDir = normalize(light.position - fragPos);
-    float diff = max(dot(norm, lightDir), 0.0);
-    diffuseResult = light.diffuse * diff * material.diffuse;
+    vec3 result = CalculatePointLight(lightSource, normal, fragPos, viewDirection);
 
-    // Specular
-    vec3 viewDir = normalize(viewPos - fragPos);
-    vec3 reflectDir = reflect(-lightDir, norm);
-
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-
-    if(material.hasSpecularTexture == 1){
-        specularResult = light.specular * spec * vec3(texture(material.specularTexture, texCoord));
-    }else if(material.hasSpecularTexture == 0){
-        specularResult = light.specular * spec * material.specular;
-    }
-
-    if(material.hasDiffuseTexture == 1){
-        color = texture(material.diffuseTexture, texCoord) * vec4(ambientResult + diffuseResult + specularResult, 1.0f);
-    }else{
-        color = vec4(ambientResult + diffuseResult + specularResult, 1.0f);
-    }
+    color = vec4(result, 1.0);
 }

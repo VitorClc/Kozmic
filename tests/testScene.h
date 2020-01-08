@@ -57,7 +57,7 @@ class TestScene : public Scene
         }
 
         void ProcessInputs(InputManager inputManager, double deltaTime){
-            movSpeed = 10.0f * deltaTime;
+            movSpeed = 1.0f * deltaTime;
 
             float xpos = inputManager.mouse.yPosition;
             float ypos = inputManager.mouse.xPosition;
