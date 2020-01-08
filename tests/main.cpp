@@ -23,7 +23,7 @@ int main(){
         
         testScene.ProcessInputs(window.inputManager, deltaTime);
         testScene.Update();
-        testScene.Render(testScene.activeCamera->transform, testScene.light->transform);
+        testScene.Render(testScene.activeCamera->transform);
 
         window.Update();
     }

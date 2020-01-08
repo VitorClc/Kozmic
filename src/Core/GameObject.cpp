@@ -35,16 +35,16 @@ void GameObject::Update(){
     }
 }
 
-void GameObject::Render(Transform* _activeCamera, Transform* _lightPos){
+void GameObject::Render(Transform* _activeCamera){
     //IF HAS MESH, RENDER IT
     if(mesh != NULL){
-        mesh->Render(_activeCamera, _lightPos);
+        mesh->Render(_activeCamera);
     }
 
     //RENDER CHILDREN MESHES
     for(unsigned int i = 0; i < children.size(); i++){
         if(children[i]->mesh != NULL){
-            children[i]->mesh->Render(_activeCamera, _lightPos);
+            children[i]->mesh->Render(_activeCamera);
         }
     }
 }

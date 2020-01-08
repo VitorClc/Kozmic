@@ -59,7 +59,7 @@ void Mesh::Start(){
     glUniform1i( glGetUniformLocation( shader, "material.specularTexture" ),  1 );
 }
 
-void Mesh::Render(Transform* _activeCamera, Transform* _lightPos)
+void Mesh::Render(Transform* _activeCamera)
 {
     glm::mat4 transformMatrix = glm::mat4(1.0f);
 

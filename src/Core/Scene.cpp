@@ -16,9 +16,9 @@ void Scene::Update(){
     } 
 }
 
-void Scene::Render(Transform* _activeCamera, Transform* _lightPos){
+void Scene::Render(Transform* _activeCamera){
     for(unsigned int i = 0; i < gameObjects.size(); i++){
-        gameObjects[i]->Render(_activeCamera, _lightPos);
+        gameObjects[i]->Render(_activeCamera);
         activeCamera->Update();
     } 
 }
