@@ -41,6 +41,7 @@ in vec2 texCoord;
 
 uniform vec3 viewPos;
 
+uniform DirectionalLight directionalLight;
 uniform int pointLightCount;
 uniform PointLight[MAX_POINT_LIGHTS] pointLightSources;
 
@@ -83,13 +84,14 @@ vec3 CalculateDirectionalLight(DirectionalLight _lightSource, vec3 _normal, vec3
 
 vec3 CalculatePointLight(PointLight _lightSource, vec3 _normal, vec3 _fragPos, vec3 _viewDirection){
     vec3 lightDirection = normalize(_lightSource.position - _fragPos);
-
+    vec3 halfwayDir = normalize(lightDirection + _viewDirection);
+    
     //DIFFUSE CALCULATION
     float diffuseCalc = max(dot(_normal, lightDirection), 0.0);
 
     //SPECULAR CALCULATION
     vec3 reflectDiretion = reflect(-lightDirection, _normal);
-    float specularCalc = pow(max(dot(_viewDirection, reflectDiretion), 0.0), material.shininess);
+    float specularCalc = pow(max(dot(_viewDirection, reflectDiretion - halfwayDir), 0.0), material.shininess);
 
     //DISTANCE CALC
     float distance = length(_lightSource.position - _fragPos);
@@ -129,11 +131,11 @@ void main ( )
     vec3 normal = normalize(Normal);
     vec3 viewPosition = normalize(viewPos - fragPos);
 
-    vec3 result;
+    vec3 result = CalculateDirectionalLight(directionalLight, normal, viewPosition);
 
     for( int i = 0; i < pointLightCount; i++){
         result += CalculatePointLight(pointLightSources[i], normal, fragPos, viewPosition);
     }
-
+    
     color = vec4(result, 1.0);
 }

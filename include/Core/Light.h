@@ -10,7 +10,7 @@
 class LightComponent : public Component{
     public:
         LightComponent(GLuint _shader, Transform* _transform, int _type);
-        const char* GetLightUniform(const char* _data);
+        const char* GetPointLightUniform(const char* _data);
 
         glm::vec3 ambient = glm::vec3(0.3f, 0.3f, 0.3f);
         glm::vec3 diffuse = glm::vec3(0.5f, 0.5f, 0.5f);

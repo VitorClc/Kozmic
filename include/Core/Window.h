@@ -1,3 +1,5 @@
+#pragma once
+
 #define GLEW_STATIC
 
 #include <SDL.h>
@@ -16,7 +18,10 @@ class Window{
         void Update();
         
         void Exit();
-        
+
+        SDL_GLContext GetGLContext();
+        SDL_Window* GetSDLWindow();
+
         ~Window();
 
         InputManager inputManager;

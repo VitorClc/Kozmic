@@ -7,7 +7,7 @@ map_Kd diffuseTest.png
 Ni 1.00
 Ks 0.00 0.00 0.00
 map_Ks specularTest.png
-Ns 18.00
+Ns 98.00
 newmtl phong1SG
 illum 4
 Kd 0.00 0.00 0.00
@@ -20,9 +20,20 @@ map_Ks specularTest.png
 Ns 18.00
 newmtl phong2SG
 illum 4
-Kd 0.13 0.51 0.05
+Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
+map_Kd woodenFloor.png
+Ni 1.00
+Ks 0.00 0.00 0.00
+Ns 18.00
+newmtl phong4SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd brick.png
+bump  -bm 1 brick.png
 Ni 1.00
 Ks 0.00 0.00 0.00
 Ns 18.00

@@ -41,19 +41,41 @@ void Window::ProcessInputs(){
     }
 
     //GET KEYBOARD INPUTS
-    inputManager.keyboard.keys = SDL_GetKeyboardState(NULL);
+    inputManager.keyboard.ProcessInputs(event);
 
     //GET MOUSE POS
     SDL_GetMouseState(&inputManager.mouse.xPosition, &inputManager.mouse.yPosition );
+
+    //GET MOUSE BUTTON
+    if(SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT)){
+        inputManager.mouse.leftButton = true;
+    }
+    else{
+        inputManager.mouse.leftButton = false;
+    }
+
+    if(SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT)){
+        inputManager.mouse.rightButton = true;
+    }
+    else{
+        inputManager.mouse.rightButton = false;
+    }
 }
 
 void Window::Update(){
-    //SDL_WarpMouseInWindow(window, width / 2, height / 2); 
     SDL_GL_SwapWindow(window);
 }
 
 void Window::Exit(){
     running = false;
+}
+
+SDL_Window* Window::GetSDLWindow(){
+    return window;
+}
+
+SDL_GLContext Window::GetGLContext(){
+    return glContext;
 }
 
 Window::~Window(){

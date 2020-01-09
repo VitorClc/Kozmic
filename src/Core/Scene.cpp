@@ -39,3 +39,8 @@ void Scene::AddPointLight(GameObject* _pointLight, LightComponent* _lightCompone
 
     _lightComponent->id = pointLights.size() - 1;
 }
+
+void Scene::SetDirectionalLight(GameObject* _light){
+    gameObjects.push_back(_light);
+    directionalLight = _light;
+}

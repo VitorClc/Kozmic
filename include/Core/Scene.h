@@ -8,7 +8,7 @@ class Scene{
         std::vector<GLuint> shaders;
         std::vector<GameObject*> gameObjects;        
         std::vector<GameObject*> cameras;        
-        std::vector<GameObject*> directionalLights;
+        GameObject* directionalLight;
         std::vector<GameObject*> pointLights;
 
         GameObject* activeCamera;
@@ -16,6 +16,7 @@ class Scene{
         void AddGameObject(GameObject* _gameObject);
         void AddCamera(GameObject* _camera);
         void AddPointLight(GameObject* _pointLight, LightComponent* _lightComponent);
+        void SetDirectionalLight(GameObject* _light);
 
         void Start();
         void Update();

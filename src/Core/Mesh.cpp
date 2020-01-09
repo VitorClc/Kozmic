@@ -95,7 +95,7 @@ void Mesh::Render(Transform* _activeCamera)
     glUniform3f(glGetUniformLocation(shader, "material.ambient"), material.ambientColor.x, material.ambientColor.y, material.ambientColor.z);
     glUniform3f(glGetUniformLocation(shader, "material.diffuse"), material.diffuseColor.x, material.diffuseColor.y, material.diffuseColor.z);
     glUniform3f(glGetUniformLocation(shader, "material.specular"),  material.specularColor.x, material.specularColor.y, material.specularColor.z);
-    glUniform1f(glGetUniformLocation(shader, "material.shininess"), 32.0f);
+    glUniform1f(glGetUniformLocation(shader, "material.shininess"), material.shininess);
     
     if(material.hasDiffuseTexture == true){
         material.DrawDiffuse();
@@ -117,6 +117,7 @@ void Mesh::ProcessModel(aiMesh *mesh, const aiScene *scene){
     aiColor4D specularColor;
     aiString diffuseTexturePath;
     aiString specularTexturePath;
+    aiString normalTexturePath;
     float shininess;
 
     std::string texturePath;
@@ -148,8 +149,13 @@ void Mesh::ProcessModel(aiMesh *mesh, const aiScene *scene){
         }
     }
 
-    if (loadedMaterial->Get(AI_MATKEY_COLOR_SPECULAR, specularColor) == AI_SUCCESS)
+    if (loadedMaterial->Get(AI_MATKEY_COLOR_SPECULAR, specularColor) == AI_SUCCESS){
         material.specularColor = glm::vec3(specularColor.r, specularColor.g, specularColor.b);
+    }
+
+    if (loadedMaterial->Get(AI_MATKEY_SHININESS, shininess) == AI_SUCCESS){
+        material.shininess = shininess;
+    }
 
     for ( GLuint i = 0; i < mesh->mNumVertices; i++ )
     {

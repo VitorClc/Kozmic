@@ -39,7 +39,7 @@ class TestScene : public Scene
             activeCamera = cameras[0];
 
             GameObject* light = new GameObject();
-            LightComponent* lightComponent = new LightComponent(shader.GetID(), light->transform, 1);
+            LightComponent* lightComponent = new LightComponent(shader.GetID(), light->transform, 2);
             light->AddComponent(lightComponent);
             light->transform->position = glm::vec3(0.0, 3.0, 3.0);
             light->transform->scale = glm::vec3(0.5,0.5,0.5);
@@ -64,58 +64,36 @@ class TestScene : public Scene
             xoffset *= sensitivity;
             yoffset *= sensitivity;
 
-            if(SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT)){
+            if(inputManager.mouse.leftButton == true){
                 cameraObject->transform->rotation.x += xoffset;
                 cameraObject->transform->rotation.y += yoffset;
 
-                if (inputManager.keyboard.keys[SDL_SCANCODE_W]) {
+                if (inputManager.keyboard.GetKey(SDL_SCANCODE_W)) {
                     cameraObject->transform->position += cameraObject->transform->front * cameraSpeed;
                 }
-                if (inputManager.keyboard.keys[SDL_SCANCODE_S]) {
+                if (inputManager.keyboard.GetKey(SDL_SCANCODE_S)) {
                     cameraObject->transform->position -= cameraObject->transform->front * cameraSpeed;
                 }
 
-                if (inputManager.keyboard.keys[SDL_SCANCODE_A]) {
+                if (inputManager.keyboard.GetKey(SDL_SCANCODE_A)) {
                     cameraObject->transform->position -= cameraObject->transform->right * cameraSpeed;
                 }
-                if (inputManager.keyboard.keys[SDL_SCANCODE_D]) {
+                if (inputManager.keyboard.GetKey(SDL_SCANCODE_D)) {
                     cameraObject->transform->position += cameraObject->transform->right * cameraSpeed;
                 }
 
-                if (inputManager.keyboard.keys[SDL_SCANCODE_SPACE]) {
+                if (inputManager.keyboard.GetKey(SDL_SCANCODE_SPACE)) {
                     cameraObject->transform->position.y += 1 * cameraSpeed;
                 }
-                if (inputManager.keyboard.keys[SDL_SCANCODE_LCTRL]) {
+                if (inputManager.keyboard.GetKey(SDL_SCANCODE_LCTRL)) {
                     cameraObject->transform->position.y -= 1 * cameraSpeed;
                 }
 
-                if (inputManager.keyboard.keys[SDL_SCANCODE_LSHIFT]) {
+                if (inputManager.keyboard.GetKey(SDL_SCANCODE_LSHIFT)) {
                     cameraSpeed = 10.0f * deltaTime;
                 }else{
                     cameraSpeed = 5.0f * deltaTime;
                 }
             }    
-
-            //COntrol light
-            if (inputManager.keyboard.keys[SDL_SCANCODE_UP]) {
-                pointLights[0]->transform->position.z += 1 * movSpeed;
-            }
-            if (inputManager.keyboard.keys[SDL_SCANCODE_DOWN]) {
-                pointLights[0]->transform->position.z -= 1 * movSpeed;
-            }
-
-            if (inputManager.keyboard.keys[SDL_SCANCODE_LEFT]) {
-                pointLights[0]->transform->position.x += 1 * movSpeed;
-            }
-            if (inputManager.keyboard.keys[SDL_SCANCODE_RIGHT]) {
-                pointLights[0]->transform->position.x -= 1 * movSpeed;
-            }
-            
-            if (inputManager.keyboard.keys[SDL_SCANCODE_RSHIFT]) {
-                pointLights[0]->transform->position.y += 1 * movSpeed;
-            }
-            if (inputManager.keyboard.keys[SDL_SCANCODE_RCTRL]) {
-                pointLights[0]->transform->position.y -= 1 * movSpeed;
-            }
         }
 };
