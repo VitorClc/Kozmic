@@ -1,19 +1,12 @@
 set (INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include/Core)
+set (SOURCE_DIR ${CMAKE_SOURCE_DIR}/src/Core)
 
-set (SOURCES 
-    Window.cpp 
-    MeshRenderer.cpp 
-    stb_image.cpp
-    Camera.cpp
-    GameObject.cpp
-    Shader.cpp
-    Transform.cpp
-    Scene.cpp
-    ScriptBase.cpp
-    Light.cpp
-)
+##### SEARCH FILES IN ALL CORE FOLDER AND SUBFOLDERS #####
+AUX_SOURCE_DIRECTORY(${SOURCE_DIR} ROOT)
+AUX_SOURCE_DIRECTORY(${SOURCE_DIR}/Base BASE)
+AUX_SOURCE_DIRECTORY(${SOURCE_DIR}/Components COMPONENTS)
 
-add_library(Core STATIC ${SOURCES})
+add_library(Core STATIC ${ROOT} ${BASE} ${COMPONENTS})
 target_include_directories(Core PUBLIC ${INCLUDE_DIR})
 
 ##### DEPENDENCIES CONFIG #####
