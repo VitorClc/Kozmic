@@ -1,4 +1,4 @@
-#include <Camera.h>
+#include <Components/Camera.h>
 
 Camera::Camera(std::vector<GLuint> _shaders, Transform* _transform){
     shaders = _shaders;

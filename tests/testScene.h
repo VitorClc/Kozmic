@@ -1,13 +1,14 @@
-#include <Scene.h>
+#include <Base/Scene.h>
+#include <Base/GameObject.h>
+#include <Base/Script.h>
+
+#include <Renderers/MeshRenderer.h>
+
+#include <Components/Transform.h>
+#include <Components/Camera.h>
+#include <Components/Light.h>
 
 #include <Shader.h>
-#include <Mesh.h>
-#include <Transform.h>
-#include <GameObject.h>
-#include <Camera.h>
-#include <ScriptBase.h>
-#include <Light.h>
-
 class TestScene : public Scene
 {
     GameObject* cameraObject;

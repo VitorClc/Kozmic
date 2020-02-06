@@ -2,7 +2,7 @@ set (INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include/Core)
 
 set (SOURCES 
     Window.cpp 
-    Mesh.cpp 
+    MeshRenderer.cpp 
     stb_image.cpp
     Camera.cpp
     GameObject.cpp
@@ -13,21 +13,7 @@ set (SOURCES
     Light.cpp
 )
 
-set (INCLUDES 
-    ${INCLUDE_DIR}/Window.h 
-    ${INCLUDE_DIR}/Mesh.h 
-    ${INCLUDE_DIR}/stb_image.h
-    ${INCLUDE_DIR}/Camera.h
-    ${INCLUDE_DIR}/GameObject.h
-    ${INCLUDE_DIR}/Shader.h
-    ${INCLUDE_DIR}/Transform.h
-    ${INCLUDE_DIR}/Scene.h
-    ${INCLUDE_DIR}/ScriptBase.h
-    ${INCLUDE_DIR}/InputManager.h
-    ${INCLUDE_DIR}/Light.h
-)
-
-add_library(Core STATIC ${SOURCES} ${INCLUDES})
+add_library(Core STATIC ${SOURCES})
 target_include_directories(Core PUBLIC ${INCLUDE_DIR})
 
 ##### DEPENDENCIES CONFIG #####

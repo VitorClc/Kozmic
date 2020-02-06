@@ -1,6 +1,6 @@
-#include <Mesh.h>
+#include <Renderers/MeshRenderer.h>
 
-Mesh::Mesh(
+MeshRenderer::MeshRenderer(
     std::vector<Vertex> _vertices, 
     std::vector<unsigned int> _indices, 
     GLuint _shader, 
@@ -14,7 +14,7 @@ Mesh::Mesh(
     transform = _transform;
 }
 
-Mesh::Mesh(
+MeshRenderer::MeshRenderer(
     aiMesh* _mesh,
     const aiScene* _scene,
     GLuint _shader,
@@ -25,7 +25,7 @@ Mesh::Mesh(
     transform = _transform;
 }
 
-void Mesh::Start(){
+void MeshRenderer::Start(){
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
@@ -59,7 +59,7 @@ void Mesh::Start(){
     glUniform1i( glGetUniformLocation( shader, "material.specularTexture" ),  1 );
 }
 
-void Mesh::Render(Transform* _activeCamera)
+void MeshRenderer::Render(Transform* _activeCamera)
 {
     glm::mat4 transformMatrix = glm::mat4(1.0f);
 
@@ -110,7 +110,7 @@ void Mesh::Render(Transform* _activeCamera)
     glBindVertexArray(0);
 }
 
-void Mesh::ProcessModel(aiMesh *mesh, const aiScene *scene){
+void MeshRenderer::ProcessModel(aiMesh *mesh, const aiScene *scene){
 
     aiColor4D ambientColor;
     aiColor4D diffuseColor;
@@ -198,7 +198,7 @@ void Mesh::ProcessModel(aiMesh *mesh, const aiScene *scene){
     }
 }
 
-Mesh::~Mesh(){
+MeshRenderer::~MeshRenderer(){
     glDeleteVertexArrays( 1, &VAO );
     glDeleteBuffers( 1, &VBO );
 }

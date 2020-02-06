@@ -2,8 +2,8 @@
 
 #include <gtc/type_ptr.hpp>
 
-#include <GameObject.h>
-#include <Transform.h>
+#include <Base/GameObject.h>
+#include <Components/Transform.h>
 
 class Camera : public Component
 {

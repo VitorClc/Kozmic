@@ -4,8 +4,8 @@
 
 #include <GL/glew.h>
 
-#include <Component.h>
-#include <Transform.h>
+#include <Components/Transform.h>
+#include <Base/Renderer.h>
 
 #include <vector>
 #include <gtc/type_ptr.hpp>
@@ -90,23 +90,23 @@ class Vertex {
         };
 };
 
-class Mesh{
+class MeshRenderer: public Renderer{
     public:
-        Mesh(
+        MeshRenderer(
             std::vector<Vertex> _vertices, 
             std::vector<unsigned int> _indices, 
             GLuint _shader, 
             Transform* _transform
         );
 
-        Mesh(
+        MeshRenderer(
             aiMesh* _mesh,
             const aiScene* _scene,
             GLuint _shader,
             Transform* _transform
         );
 
-        ~Mesh();
+        ~MeshRenderer();
 
         void ProcessModel(aiMesh *mesh, const aiScene *scene);
 

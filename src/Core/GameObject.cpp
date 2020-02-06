@@ -1,4 +1,4 @@
-#include <GameObject.h>
+#include <Base/GameObject.h>
 
 GameObject::GameObject(){
     transform = new Transform();
@@ -53,7 +53,7 @@ void GameObject::AddComponent(Component* component){
     components.push_back(component);
 }
 
-void GameObject::SetMesh(Mesh* _mesh){
+void GameObject::SetMesh(MeshRenderer* _mesh){
     mesh = _mesh;
 }
 
@@ -101,7 +101,7 @@ void GameObject::ProcessNode(aiNode* node, const aiScene* scene, GLuint shader){
         childNode->transform->rotation = glm::vec3(nodeRot.x, nodeRot.y, nodeRot.z);
         childNode->transform->scale = glm::vec3(nodeScale.x, nodeScale.y, nodeScale.z);
 
-        Mesh* childMesh = new Mesh(mesh, scene, shader, childNode->transform);
+        MeshRenderer* childMesh = new MeshRenderer(mesh, scene, shader, childNode->transform);
         childNode->SetMesh(childMesh);
         AddChild(childNode);
     }

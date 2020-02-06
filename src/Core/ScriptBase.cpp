@@ -1,6 +1,6 @@
-#include <ScriptBase.h>
+#include <Base/Script.h>
 
-ScriptBase::ScriptBase(GameObject* _gameObject){
+Script::Script(GameObject* _gameObject){
     gameObject = _gameObject;
     transform = _gameObject->transform;
 }

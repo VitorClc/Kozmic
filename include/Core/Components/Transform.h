@@ -2,7 +2,7 @@
 
 #define GLEW_STATIC
 
-#include <Component.h>
+#include <Base/Component.h>
 
 #include <gtx/transform.hpp>
 

@@ -1,4 +1,4 @@
-#include <Light.h>
+#include <Components/Light.h>
 
 LightComponent::LightComponent(GLuint _shader, Transform* _transform, int _type){
     transform = _transform;

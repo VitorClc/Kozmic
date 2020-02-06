@@ -2,9 +2,9 @@
 
 #include <vector>
 
-#include <Component.h>
-#include <Transform.h>
-#include <Mesh.h>
+#include <Base/Component.h>
+#include <Components/Transform.h>
+#include <Renderers/MeshRenderer.h>
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -20,7 +20,7 @@ class GameObject
     
     public:
         Transform* transform;
-        Mesh* mesh;
+        MeshRenderer* mesh;
        
         GameObject();
 
@@ -30,7 +30,7 @@ class GameObject
 
         void Render(Transform* _activeCamera);
 
-        void SetMesh(Mesh* mesh);
+        void SetMesh(MeshRenderer* mesh);
 
         void AddComponent(Component* component);
 

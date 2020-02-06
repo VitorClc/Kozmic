@@ -1,7 +1,7 @@
 #include <vector>
 
-#include <GameObject.h>
-#include <Light.h>
+#include <Base/GameObject.h>
+#include <Components/Light.h>
 
 class Scene{
     public:

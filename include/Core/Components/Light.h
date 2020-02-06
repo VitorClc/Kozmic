@@ -4,8 +4,8 @@
 
 #include <GL/glew.h>
 
-#include <Component.h>
-#include <Transform.h>
+#include <Base/Component.h>
+#include <Components/Transform.h>
 
 class LightComponent : public Component{
     public:
