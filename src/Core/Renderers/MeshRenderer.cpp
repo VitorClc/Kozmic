@@ -53,8 +53,6 @@ void MeshRenderer::Start(){
     glBindVertexArray(0);
 
     glUseProgram(shader);   
-    
-
     glUniform1i( glGetUniformLocation( shader, "material.diffuseTexture" ),  0 );
     glUniform1i( glGetUniformLocation( shader, "material.specularTexture" ),  1 );
 }
@@ -92,9 +90,9 @@ void MeshRenderer::Render(Transform* _activeCamera)
         glUniform1i(glGetUniformLocation(shader, "material.hasSpecularTexture"), 0);
     }
 
-    glUniform3f(glGetUniformLocation(shader, "material.ambient"), material.ambientColor.x, material.ambientColor.y, material.ambientColor.z);
-    glUniform3f(glGetUniformLocation(shader, "material.diffuse"), material.diffuseColor.x, material.diffuseColor.y, material.diffuseColor.z);
-    glUniform3f(glGetUniformLocation(shader, "material.specular"),  material.specularColor.x, material.specularColor.y, material.specularColor.z);
+    glUniform3f(glGetUniformLocation(shader, "material.ambient"), material.ambientColor.r, material.ambientColor.g, material.ambientColor.b);
+    glUniform3f(glGetUniformLocation(shader, "material.diffuse"), material.diffuseColor.r, material.diffuseColor.g, material.diffuseColor.b);
+    glUniform3f(glGetUniformLocation(shader, "material.specular"),  material.specularColor.r, material.specularColor.g, material.specularColor.b);
     glUniform1f(glGetUniformLocation(shader, "material.shininess"), material.shininess);
     
     if(material.hasDiffuseTexture == true){

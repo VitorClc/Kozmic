@@ -4,7 +4,7 @@
 
 #include <SDL.h>
 #include <GL/glew.h>
-#include <InputManager.h>
+#include <Base/InputManager.h>
 
 class Window{
     public:

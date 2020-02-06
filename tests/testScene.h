@@ -8,10 +8,13 @@
 #include <Components/Camera.h>
 #include <Components/Light.h>
 
-#include <Shader.h>
+#include <Base/Shader.h>
+
 class TestScene : public Scene
 {
     GameObject* cameraObject;
+    GameObject* light;
+
     float cameraSpeed;
     float movSpeed;
 
@@ -39,11 +42,11 @@ class TestScene : public Scene
             AddCamera(cameraObject);
             activeCamera = cameras[0];
 
-            GameObject* light = new GameObject();
+            light = new GameObject();
             LightComponent* lightComponent = new LightComponent(shader.GetID(), light->transform, 2);
+            light->LoadModel("lamp.obj", shader2.GetID());
             light->AddComponent(lightComponent);
             light->transform->position = glm::vec3(0.0, 3.0, 3.0);
-            light->transform->scale = glm::vec3(0.5,0.5,0.5);
             AddPointLight(light, lightComponent);
 
             GameObject* test = new GameObject();
@@ -95,6 +98,19 @@ class TestScene : public Scene
                 }else{
                     cameraSpeed = 5.0f * deltaTime;
                 }
-            }    
+            }
+            
+            if (inputManager.keyboard.GetKey(SDL_SCANCODE_UP)) {
+                light->transform->position.z += 1 * movSpeed;
+            }
+            if (inputManager.keyboard.GetKey(SDL_SCANCODE_DOWN)) {
+                light->transform->position.z -= 1 * movSpeed;
+            }
+            if (inputManager.keyboard.GetKey(SDL_SCANCODE_LEFT)) {
+                light->transform->position.x += 1 * movSpeed;
+            }
+            if (inputManager.keyboard.GetKey(SDL_SCANCODE_RIGHT)) {
+                light->transform->position.x -= 1 * movSpeed;
+            }
         }
 };

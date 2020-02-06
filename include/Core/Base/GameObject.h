@@ -20,7 +20,7 @@ class GameObject
     
     public:
         Transform* transform;
-        MeshRenderer* mesh;
+        Renderer* renderer;
        
         GameObject();
 
@@ -30,7 +30,7 @@ class GameObject
 
         void Render(Transform* _activeCamera);
 
-        void SetMesh(MeshRenderer* mesh);
+        void SetRenderer(Renderer* _renderer);
 
         void AddComponent(Component* component);
 

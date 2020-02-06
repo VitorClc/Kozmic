@@ -48,7 +48,7 @@ uniform PointLight[MAX_POINT_LIGHTS] pointLightSources;
 uniform Material material;
 
 vec3 CalculateDirectionalLight(DirectionalLight _lightSource, vec3 _normal, vec3 _viewDirection){
-    vec3 lightDirection = normalize(-_lightSource.direction);
+    vec3 lightDirection = normalize(_lightSource.direction);
 
     //DIFFUSE CALCULATION
     float diffuseCalc = max(dot(_normal, lightDirection), 0.0);
@@ -67,7 +67,7 @@ vec3 CalculateDirectionalLight(DirectionalLight _lightSource, vec3 _normal, vec3
         ambientResult = _lightSource.ambient * vec3(texture(material.diffuseTexture, texCoord));
         diffuseResult = _lightSource.diffuse * diffuseCalc * vec3(texture(material.diffuseTexture, texCoord));
     }
-    else{
+    else if(material.hasDiffuseTexture == 0){
         ambientResult = _lightSource.ambient * material.ambient;
         diffuseResult = _lightSource.diffuse * diffuseCalc * material.diffuse;
     }

@@ -8,18 +8,15 @@ LightComponent::LightComponent(GLuint _shader, Transform* _transform, int _type)
     switch (type)
     {
         case 2: //POINTLIGHT
-            glUniform1f( glGetUniformLocation( shader, GetPointLightUniform("constant")), 1.0f);
-            glUniform1f( glGetUniformLocation( shader, GetPointLightUniform("linear")), 0.09f);
-            glUniform1f( glGetUniformLocation( shader, GetPointLightUniform("quadratic")), 0.032f);
+            glUniform1f( glGetUniformLocation( shader, GetPointLightUniform("constant").c_str()), 1.0f);
+            glUniform1f( glGetUniformLocation( shader, GetPointLightUniform("linear").c_str()), 0.09f);
+            glUniform1f( glGetUniformLocation( shader, GetPointLightUniform("quadratic").c_str()), 0.032f);
             break;
         
     }
 };
 
-void LightComponent::Update(){
-    GLint lightPosLoc;
-    GLint lightDirLoc;
-    
+void LightComponent::Update(){    
     switch (type)
     {
         //UPDATE LIGHT DIRECTION IF IS A DIRECTIONAL LIGHT
@@ -36,15 +33,16 @@ void LightComponent::Update(){
             break;
         //UPDATE LIGHT POSITION IF IS A SPOTLIGHT
         case 2:
-            lightPosLoc = glGetUniformLocation( shader, GetPointLightUniform("position"));
-
+            lightPosLoc = glGetUniformLocation( shader, GetPointLightUniform("position").c_str());
+            
             glUniform3f(lightPosLoc,transform->position.x, 
                                     transform->position.y, 
                                     transform->position.z);
             
-            glUniform3f(glGetUniformLocation(shader, GetPointLightUniform("ambient")), ambient.r, ambient.g, ambient.b);
-            glUniform3f(glGetUniformLocation(shader, GetPointLightUniform("diffuse")), diffuse.r, diffuse.g, diffuse.b);
-            glUniform3f(glGetUniformLocation(shader, GetPointLightUniform("specular")), specular.r, specular.g, specular.b);
+            glUniform3f(glGetUniformLocation(shader, GetPointLightUniform("ambient").c_str()), ambient.r, ambient.g, ambient.b);
+            glUniform3f(glGetUniformLocation(shader, GetPointLightUniform("diffuse").c_str()), diffuse.r, diffuse.g, diffuse.b);
+            glUniform3f(glGetUniformLocation(shader, GetPointLightUniform("specular").c_str()), specular.r, specular.g, specular.b);
+            
             break;
 
         default:
@@ -52,7 +50,7 @@ void LightComponent::Update(){
     }
 }
 
-const char* LightComponent::GetPointLightUniform(const char* _data){
+std::string LightComponent::GetPointLightUniform(const char* _data){
     std::string lightID = "pointLightSources[";
     lightID += std::to_string(id);
     lightID += "]";
@@ -64,5 +62,5 @@ const char* LightComponent::GetPointLightUniform(const char* _data){
     completeAccess += lightID.c_str();
     completeAccess += lightData.c_str();
 
-    return completeAccess.c_str();
+    return completeAccess;
 }
