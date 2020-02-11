@@ -3,6 +3,8 @@
 #include <Base/GameObject.h>
 #include <Components/Light.h>
 
+#include <btBulletDynamicsCommon.h>
+
 class Scene{
     public:
         std::vector<GLuint> shaders;
@@ -10,6 +12,7 @@ class Scene{
         std::vector<GameObject*> cameras;        
         GameObject* directionalLight;
         std::vector<GameObject*> pointLights;
+        std::vector<btCollisionShape*> colliders;
 
         GameObject* activeCamera;
 
@@ -19,6 +22,7 @@ class Scene{
         void SetDirectionalLight(GameObject* _light);
 
         void Start();
+        void UpdatePhysics(btDiscreteDynamicsWorld* dynamicsWorld);
         void Update();
         void Render(Transform* _activeCamera);
 };

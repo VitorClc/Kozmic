@@ -10,6 +10,10 @@ void Scene::Start(){
     }
 }
 
+void Scene::UpdatePhysics(btDiscreteDynamicsWorld* dynamicsWorld){
+
+}
+
 void Scene::Update(){
     for(unsigned int i = 0; i < gameObjects.size(); i++){
         gameObjects[i]->Update();
