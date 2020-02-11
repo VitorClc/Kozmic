@@ -13,7 +13,6 @@
 class TestScene : public Scene
 {
     GameObject* cameraObject;
-    GameObject* light;
 
     float cameraSpeed;
     float movSpeed;
@@ -24,6 +23,8 @@ class TestScene : public Scene
     float sensitivity = 0.1;
 
     public:
+        GameObject* light;
+
         TestScene(){
             Shader shader = Shader("basic.vert", "basic.frag");
             shaders.push_back(shader.GetID());
