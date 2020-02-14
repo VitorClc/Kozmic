@@ -20,14 +20,12 @@ class MeshRenderer: public Renderer{
         MeshRenderer(
             std::vector<Vertex> _vertices, 
             std::vector<unsigned int> _indices, 
-            GLuint _shader, 
             Transform* _transform
         );
 
         MeshRenderer(
             aiMesh* _mesh,
             const aiScene* _scene,
-            GLuint _shader,
             Transform* _transform
         );
 
@@ -39,7 +37,6 @@ class MeshRenderer: public Renderer{
         void Render(Transform* _activeCamera);
 
     private:
-        GLuint shader;
         Transform* transform;
 
         unsigned int VAO, VBO, EBO, textureBuffer;

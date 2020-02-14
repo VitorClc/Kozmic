@@ -1,5 +1,7 @@
 #define STB_IMAGE_IMPLEMENTATION
+
 #include <Base/stb_image.h>
+#include <Base/Shader.h>
 
 class Texture{
     public:
@@ -61,6 +63,8 @@ class Material{
 
         bool hasDiffuseTexture = false;
         bool hasSpecularTexture = false;
+
+        GLuint shaderID;
 };
 
 class Vertex {

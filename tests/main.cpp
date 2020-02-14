@@ -2,6 +2,7 @@
 
 #include <Base/Window.h>
 #include <Base/PhysicsManager.h>
+#include <Base/Shader.h>
 
 #include <testScene.h>
 

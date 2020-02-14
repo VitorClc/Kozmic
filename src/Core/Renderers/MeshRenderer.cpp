@@ -3,25 +3,21 @@
 MeshRenderer::MeshRenderer(
     std::vector<Vertex> _vertices, 
     std::vector<unsigned int> _indices, 
-    GLuint _shader, 
     Transform* _transform
 )
 {
     vertices = _vertices;
     indices = _indices;
 
-    shader = _shader;
     transform = _transform;
 }
 
 MeshRenderer::MeshRenderer(
     aiMesh* _mesh,
     const aiScene* _scene,
-    GLuint _shader,
     Transform* _transform
 ){
     ProcessModel(_mesh, _scene);
-    shader = _shader;
     transform = _transform;
 }
 
@@ -52,9 +48,9 @@ void MeshRenderer::Start(){
     
     glBindVertexArray(0);
 
-    glUseProgram(shader);   
-    glUniform1i( glGetUniformLocation( shader, "material.diffuseTexture" ),  0 );
-    glUniform1i( glGetUniformLocation( shader, "material.specularTexture" ),  1 );
+    glUseProgram(material.shaderID);   
+    glUniform1i( glGetUniformLocation( material.shaderID, "material.diffuseTexture" ),  0 );
+    glUniform1i( glGetUniformLocation( material.shaderID, "material.specularTexture" ),  1 );
 }
 
 void MeshRenderer::Render(Transform* _activeCamera)
@@ -67,33 +63,33 @@ void MeshRenderer::Render(Transform* _activeCamera)
         transformMatrix = transform->GetMatrix();
     }
 
-    glUseProgram(shader);
+    glUseProgram(material.shaderID);
 
-    unsigned int modelLoc = glGetUniformLocation(shader, "model");
+    unsigned int modelLoc = glGetUniformLocation(material.shaderID, "model");
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(transformMatrix));
 
-    GLint viewPosLoc = glGetUniformLocation( shader, "viewPos" );
+    GLint viewPosLoc = glGetUniformLocation( material.shaderID, "viewPos" );
 
     glUniform3f(viewPosLoc, _activeCamera->position.x, 
                             _activeCamera->position.y, 
                             _activeCamera->position.z);
  
     if(material.hasDiffuseTexture == true){
-        glUniform1i(glGetUniformLocation(shader, "material.hasDiffuseTexture"), 1);
+        glUniform1i(glGetUniformLocation(material.shaderID, "material.hasDiffuseTexture"), 1);
     }else{
-        glUniform1i(glGetUniformLocation(shader, "material.hasDiffuseTexture"), 0);
+        glUniform1i(glGetUniformLocation(material.shaderID, "material.hasDiffuseTexture"), 0);
     }
 
     if(material.hasSpecularTexture == true){
-        glUniform1i(glGetUniformLocation(shader, "material.hasSpecularTexture"), 1);
+        glUniform1i(glGetUniformLocation(material.shaderID, "material.hasSpecularTexture"), 1);
     }else{
-        glUniform1i(glGetUniformLocation(shader, "material.hasSpecularTexture"), 0);
+        glUniform1i(glGetUniformLocation(material.shaderID, "material.hasSpecularTexture"), 0);
     }
 
-    glUniform3f(glGetUniformLocation(shader, "material.ambient"), material.ambientColor.r, material.ambientColor.g, material.ambientColor.b);
-    glUniform3f(glGetUniformLocation(shader, "material.diffuse"), material.diffuseColor.r, material.diffuseColor.g, material.diffuseColor.b);
-    glUniform3f(glGetUniformLocation(shader, "material.specular"),  material.specularColor.r, material.specularColor.g, material.specularColor.b);
-    glUniform1f(glGetUniformLocation(shader, "material.shininess"), material.shininess);
+    glUniform3f(glGetUniformLocation(material.shaderID, "material.ambient"), material.ambientColor.r, material.ambientColor.g, material.ambientColor.b);
+    glUniform3f(glGetUniformLocation(material.shaderID, "material.diffuse"), material.diffuseColor.r, material.diffuseColor.g, material.diffuseColor.b);
+    glUniform3f(glGetUniformLocation(material.shaderID, "material.specular"),  material.specularColor.r, material.specularColor.g, material.specularColor.b);
+    glUniform1f(glGetUniformLocation(material.shaderID, "material.shininess"), material.shininess);
     
     if(material.hasDiffuseTexture == true){
         material.DrawDiffuse();

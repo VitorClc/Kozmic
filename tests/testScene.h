@@ -45,13 +45,13 @@ class TestScene : public Scene
 
             light = new GameObject();
             LightComponent* lightComponent = new LightComponent(shader.GetID(), light->transform, 2);
-            light->LoadModel("lamp.obj", shader2.GetID());
+            light->LoadModel("lamp.obj");
             light->AddComponent(lightComponent);
             light->transform->position = glm::vec3(0.0, 3.0, 3.0);
             AddPointLight(light, lightComponent);
 
             GameObject* test = new GameObject();
-            test->LoadModel("testScene.obj", shader.GetID());
+            test->LoadModel("testScene.obj");
             AddGameObject(test);
         }
 

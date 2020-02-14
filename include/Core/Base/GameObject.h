@@ -37,6 +37,6 @@ class GameObject
         void AddChild(GameObject* _child);
         int ChildCount();
         
-        bool LoadModel(const char* filename, GLuint shader);
-        void ProcessNode(aiNode* node, const aiScene* scene, GLuint shader);
+        bool LoadModel(const char* filename);
+        void ProcessNode(aiNode* node, const aiScene* scene);
 };

@@ -62,7 +62,7 @@ void GameObject::AddChild(GameObject* _child){
     _child->transform->SetParent(this->transform);
 }
 
-bool GameObject::LoadModel(const char* filename, GLuint shader){
+bool GameObject::LoadModel(const char* filename){
     Assimp::Importer importer;
 
     std::string completePath = "resources/models/";
@@ -78,12 +78,12 @@ bool GameObject::LoadModel(const char* filename, GLuint shader){
         return false;
     }
 
-    ProcessNode( scene->mRootNode, scene, shader );
+    ProcessNode( scene->mRootNode, scene );
 
     return true;
 }
 
-void GameObject::ProcessNode(aiNode* node, const aiScene* scene, GLuint shader){
+void GameObject::ProcessNode(aiNode* node, const aiScene* scene){
 
     aiVector3t<float> nodeScale = aiVector3t<float>(0,0,0);
     aiVector3t<float> nodeRot = aiVector3t<float>(0,0,0);
@@ -101,14 +101,14 @@ void GameObject::ProcessNode(aiNode* node, const aiScene* scene, GLuint shader){
         childNode->transform->rotation = glm::vec3(nodeRot.x, nodeRot.y, nodeRot.z);
         childNode->transform->scale = glm::vec3(nodeScale.x, nodeScale.y, nodeScale.z);
 
-        MeshRenderer* childMesh = new MeshRenderer(mesh, scene, shader, childNode->transform);
+        MeshRenderer* childMesh = new MeshRenderer(mesh, scene, childNode->transform);
         childNode->SetRenderer(childMesh);
         AddChild(childNode);
     }
 
     for ( GLuint i = 0; i < node->mNumChildren; i++ )
     {
-        ProcessNode( node->mChildren[i], scene, shader);
+        ProcessNode( node->mChildren[i], scene);
     }
 }
 
