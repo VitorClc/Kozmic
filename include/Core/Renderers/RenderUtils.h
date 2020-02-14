@@ -2,6 +2,7 @@
 
 #include <Base/stb_image.h>
 #include <Base/Shader.h>
+#include <Base/ShaderManager.h>
 
 class Texture{
     public:
@@ -42,7 +43,10 @@ class Texture{
 
 class Material{
     public:
-        Material(){};
+        Material(){ 
+            ShaderManager& shaderManager = ShaderManager::getInstance();
+            shaderID = shaderManager.shaders[0]->GetID();
+        };
 
         glm::vec3 ambientColor = glm::vec3(0.0,0.0,0.0);
         glm::vec3 diffuseColor = glm::vec3(1.0,0.0,0.0);
@@ -64,6 +68,11 @@ class Material{
         bool hasDiffuseTexture = false;
         bool hasSpecularTexture = false;
 
+        GLuint GetShader(){
+            return shaderID;
+        };
+    
+    private:
         GLuint shaderID;
 };
 

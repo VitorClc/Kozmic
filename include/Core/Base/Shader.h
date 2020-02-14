@@ -1,4 +1,5 @@
 #pragma once
+
 #define GLEW_STATIC
 
 #include <fstream>
@@ -10,11 +11,14 @@ class Shader
 {
     public:
         Shader(const char* vertexPath, const char* fragmentPath);
+        void Compile();
+
+        std::string vertexShaderSource;
+        std::string fragmentShaderSource;
 
         GLuint GetID();
 
     private:
-        void Load(const GLchar* vertexShaderSource, const GLchar* fragmentShaderSource);
         GLuint shaderID;     
 };
 

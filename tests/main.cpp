@@ -2,13 +2,25 @@
 
 #include <Base/Window.h>
 #include <Base/PhysicsManager.h>
-#include <Base/Shader.h>
+#include <Base/ShaderManager.h>
 
 #include <testScene.h>
-
+    
 int main(){
     Window window = Window(1024,720,"TESTS");
+    
     PhysicsManager* physicsManager = new PhysicsManager();
+    ShaderManager& shaderManager = ShaderManager::getInstance();
+
+    Shader shader = Shader("basic.vert", "basic.frag");
+    shaderManager.AddShader(&shader);
+
+    Shader shader2 = Shader("emissive.vert", "emissive.frag");
+    shaderManager.AddShader(&shader2);
+
+    shaderManager.CompileShaders();
+
+    //std::cout<<shaderManager->standardShader->GetID()<<std::endl;
 
     TestScene testScene = TestScene();
     testScene.Start();
