@@ -8,8 +8,6 @@
 
 #include <Base/Renderer.h>
 
-#include <Renderers/RenderUtils.h>
-
 #include <vector>
 #include <gtc/type_ptr.hpp>
 
@@ -42,6 +40,4 @@ class MeshRenderer: public Renderer{
         unsigned int VAO, VBO, EBO, textureBuffer;
         std::vector<Vertex> vertices;
         std::vector<unsigned int> indices;
-        
-        Material material = Material();
 };  

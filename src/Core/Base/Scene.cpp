@@ -25,9 +25,8 @@ void Scene::Render(Transform* _activeCamera){
 
     for(unsigned int i = 0; i < gameObjects.size(); i++){
         gameObjects[i]->Render(_activeCamera);
-    } 
-    
-    activeCamera->Update();
+        activeCamera->Update(); 
+    }     
 }
 
 void Scene::AddGameObject(GameObject* _gameObject){

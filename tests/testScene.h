@@ -42,7 +42,7 @@ class TestScene : public Scene
             light->LoadModel("lamp.obj");
             light->AddComponent(lightComponent);
             light->transform->position = glm::vec3(0.0, 3.0, 3.0);
-            std::cout<<light->ChildCount()<<std::endl;
+            light->GetChild(0)->renderer->material.SetShader(1);
             AddPointLight(light, lightComponent);
 
             GameObject* test = new GameObject();
@@ -107,6 +107,13 @@ class TestScene : public Scene
             }
             if (inputManager.keyboard.GetKey(SDL_SCANCODE_RIGHT)) {
                 light->transform->position.x -= 1 * movSpeed;
+            }
+
+            if (inputManager.keyboard.GetKey(SDL_SCANCODE_RSHIFT)) {
+                light->transform->position.y += 1 * movSpeed;
+            }
+            if (inputManager.keyboard.GetKey(SDL_SCANCODE_RCTRL)) {
+                light->transform->position.y -= 1 * movSpeed;
             }
         }
 };

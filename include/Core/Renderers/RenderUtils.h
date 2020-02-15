@@ -71,7 +71,7 @@ class Material{
         bool hasDiffuseTexture = false;
         bool hasSpecularTexture = false;
 
-        GLuint GetShader(){
+        int GetShader(){
             return shaderID;
         };
     
