@@ -7,7 +7,7 @@
 
 class Scene{
     public:
-        std::vector<GLuint> shaders;
+        ShaderManager& shaderManager = ShaderManager::getInstance();
         std::vector<GameObject*> gameObjects;        
         std::vector<GameObject*> cameras;        
         GameObject* directionalLight;

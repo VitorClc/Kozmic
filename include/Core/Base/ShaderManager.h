@@ -11,13 +11,13 @@ class ShaderManager{
             return INSTANCE;
         }
 
-
         void AddShader(Shader* _shader);
         void CompileShaders();
         
-        std::vector<Shader*> shaders;
-    
+        GLuint GetShader(GLuint shaderID);
+        GLuint ShaderAmount();
+
     private:
         ShaderManager(){};
-
+        std::vector<Shader*> shaders;
 };

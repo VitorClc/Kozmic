@@ -34,6 +34,9 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath){
     {
         std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
     }
+
+    vertexShaderSource = vertexCode;
+    fragmentShaderSource = fragmentCode;
 };
 
 void Shader::Compile(){

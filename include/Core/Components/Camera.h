@@ -8,11 +8,11 @@
 class Camera : public Component
 {
     public:
-        Camera(std::vector<GLuint> _shaders, Transform* _transform);
+        Camera(Transform* _transform);
 
         void Start();
 
-        void Update();
+        void Update(); 
         
         std::vector<GLuint> shaders;
 
@@ -21,4 +21,6 @@ class Camera : public Component
         Transform* transform;
 
         glm::mat4 projection;
+
+        ShaderManager& shaderManager = ShaderManager::getInstance();
 };

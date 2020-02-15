@@ -45,7 +45,7 @@ class Material{
     public:
         Material(){ 
             ShaderManager& shaderManager = ShaderManager::getInstance();
-            shaderID = shaderManager.shaders[0]->GetID();
+            shaderID = shaderManager.GetShader(0);
         };
 
         glm::vec3 ambientColor = glm::vec3(0.0,0.0,0.0);

@@ -26,25 +26,19 @@ class TestScene : public Scene
         GameObject* light;
 
         TestScene(){
-            Shader shader = Shader("basic.vert", "basic.frag");
-            shaders.push_back(shader.GetID());
-
-            Shader shader2 = Shader("emissive.vert", "emissive.frag");
-            shaders.push_back(shader2.GetID());
-
             cameraObject = new GameObject();
             cameraObject->transform->position.z = -7;
             cameraObject->transform->position.y = 3;
             cameraObject->transform->rotation.y = 90;
             cameraObject->transform->rotation.x = -30;
-            Camera* cameraComponent = new Camera(shaders, cameraObject->transform);
+            Camera* cameraComponent = new Camera(cameraObject->transform);
             cameraObject->AddComponent(cameraComponent);
 
             AddCamera(cameraObject);
             activeCamera = cameras[0];
 
             light = new GameObject();
-            LightComponent* lightComponent = new LightComponent(shader.GetID(), light->transform, 2);
+            LightComponent* lightComponent = new LightComponent(light->transform, 2);
             light->LoadModel("lamp.obj");
             light->AddComponent(lightComponent);
             light->transform->position = glm::vec3(0.0, 3.0, 3.0);

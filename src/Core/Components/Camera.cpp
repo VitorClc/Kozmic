@@ -1,7 +1,6 @@
 #include <Components/Camera.h>
 
-Camera::Camera(std::vector<GLuint> _shaders, Transform* _transform){
-    shaders = _shaders;
+Camera::Camera(Transform* _transform){
     transform = _transform;
 }
 
@@ -22,9 +21,9 @@ void Camera::Update(){
 
     glm::mat4 view = glm::lookAt(transform->position, transform->position + transform->front, transform->up);
     
-    for(unsigned int i = 0; i < shaders.size(); i++){
-        unsigned int viewLoc = glGetUniformLocation(shaders[i], "view");
-        unsigned int projectionLoc = glGetUniformLocation(shaders[i], "projection");
+    for(unsigned int i = 0; i < shaderManager.ShaderAmount(); i++){
+        unsigned int viewLoc = glGetUniformLocation(shaderManager.GetShader(i), "view");
+        unsigned int projectionLoc = glGetUniformLocation(shaderManager.GetShader(i), "projection");
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
     }

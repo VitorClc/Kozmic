@@ -13,12 +13,12 @@ class Shader
         Shader(const char* vertexPath, const char* fragmentPath);
         void Compile();
 
-        std::string vertexShaderSource;
-        std::string fragmentShaderSource;
-
         GLuint GetID();
 
     private:
         GLuint shaderID;     
+
+        std::string vertexShaderSource;
+        std::string fragmentShaderSource;
 };
 

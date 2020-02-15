@@ -5,11 +5,13 @@
 #include <GL/glew.h>
 
 #include <Base/Component.h>
+#include <Base/ShaderManager.h>
+
 #include <Components/Transform.h>
 
 class LightComponent : public Component{
     public:
-        LightComponent(GLuint _shader, Transform* _transform, int _type);
+        LightComponent(Transform* _transform, int _type);
         std::string GetPointLightUniform(const char* _data);
 
         glm::vec3 ambient = glm::vec3(0.3f, 0.3f, 0.3f);
@@ -19,12 +21,14 @@ class LightComponent : public Component{
         void Update();
     
         Transform* transform;        
-        GLuint shader;
         int type;
         int id;
-    
+        GLuint shaderID;
+
     private:
         void Start(){};
         GLint lightPosLoc;
         GLint lightDirLoc;
+
+        ShaderManager& shaderManager = ShaderManager::getInstance();
 };

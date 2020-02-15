@@ -14,13 +14,11 @@ int main(){
 
     Shader shader = Shader("basic.vert", "basic.frag");
     shaderManager.AddShader(&shader);
-
-    Shader shader2 = Shader("emissive.vert", "emissive.frag");
+    
+    Shader shader2 = Shader("emissive.vert", "emissive.frag");    
     shaderManager.AddShader(&shader2);
 
     shaderManager.CompileShaders();
-
-    //std::cout<<shaderManager->standardShader->GetID()<<std::endl;
 
     TestScene testScene = TestScene();
     testScene.Start();

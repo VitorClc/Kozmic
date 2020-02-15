@@ -10,3 +10,11 @@ void ShaderManager::CompileShaders(){
         shaders[i]->Compile();
     }
 }
+
+GLuint ShaderManager::GetShader(GLuint shaderID){
+    return shaders[shaderID]->GetID();
+}
+
+GLuint ShaderManager::ShaderAmount(){
+    return shaders.size();
+}
