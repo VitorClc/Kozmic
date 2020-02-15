@@ -44,7 +44,6 @@ class Texture{
 class Material{
     public:
         Material(){ 
-            ShaderManager& shaderManager = ShaderManager::getInstance();
             shaderID = shaderManager.GetShader(0);
         };
 
@@ -65,6 +64,10 @@ class Material{
             glBindTexture(GL_TEXTURE_2D, specularTexture.GetID());
         }
 
+        void SetShader(GLuint _newShader){
+            shaderID = shaderManager.GetShader(_newShader);
+        }
+
         bool hasDiffuseTexture = false;
         bool hasSpecularTexture = false;
 
@@ -74,6 +77,8 @@ class Material{
     
     private:
         GLuint shaderID;
+        ShaderManager& shaderManager = ShaderManager::getInstance();
+
 };
 
 class Vertex {

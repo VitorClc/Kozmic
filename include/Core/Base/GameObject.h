@@ -34,6 +34,7 @@ class GameObject
 
         void AddComponent(Component* component);
 
+    GameObject* GetChild(GLuint _child); 
         void AddChild(GameObject* _child);
         int ChildCount();
         

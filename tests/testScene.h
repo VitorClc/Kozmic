@@ -42,6 +42,7 @@ class TestScene : public Scene
             light->LoadModel("lamp.obj");
             light->AddComponent(lightComponent);
             light->transform->position = glm::vec3(0.0, 3.0, 3.0);
+            std::cout<<light->ChildCount()<<std::endl;
             AddPointLight(light, lightComponent);
 
             GameObject* test = new GameObject();

@@ -115,3 +115,7 @@ void GameObject::ProcessNode(aiNode* node, const aiScene* scene){
 int GameObject::ChildCount(){
     return children.size();
 }
+
+GameObject* GameObject::GetChild(GLuint _child){
+    return children[_child];
+}
