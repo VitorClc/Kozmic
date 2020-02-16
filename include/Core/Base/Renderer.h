@@ -6,8 +6,8 @@
 class Renderer
 {
     public:
-        virtual void Start() = 0;
-        virtual void Render(Transform* _activeCamera) = 0;
+        virtual void Start(){};
+        virtual void Render(Transform* _activeCamera){};
 
         Material material = Material();
 };

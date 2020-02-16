@@ -51,6 +51,7 @@ class TestScene : public Scene
 
             GameObject* test2 = new GameObject();
             test2->LoadModel("lamp.obj");
+            AddGameObject(test2);
         }
 
         void ProcessInputs(InputManager inputManager, double deltaTime){

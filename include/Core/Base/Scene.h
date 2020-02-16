@@ -1,6 +1,8 @@
 #include <vector>
 
 #include <Base/GameObject.h>
+#include <Base/Renderer.h>
+
 #include <Components/Light.h>
 
 #include <btBulletDynamicsCommon.h>
@@ -15,6 +17,7 @@ class Scene{
         std::vector<btCollisionShape*> colliders;
 
         GameObject* activeCamera;
+        GameObject* rootGameObject = new GameObject();
 
         void AddGameObject(GameObject* _gameObject);
         void AddCamera(GameObject* _camera);

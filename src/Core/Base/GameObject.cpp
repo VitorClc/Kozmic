@@ -19,9 +19,11 @@ void GameObject::Start(){
     }
 
     //START CHILDREN
-    for(unsigned int i = 0; i < children.size(); i++){
-        children[i]->Start();
-    }     
+    if(children.size() > 0){
+        for(unsigned int i = 0; i < children.size(); i++){
+            children[i]->Start();
+        }     
+    }
 }
 
 void GameObject::Update(){
@@ -30,8 +32,10 @@ void GameObject::Update(){
     }
 
     //UPDATE CHILDREN
-    for(unsigned int i = 0; i < children.size(); i++){
-        children[i]->Update();
+    if(children.size() > 0){
+        for(unsigned int i = 0; i < children.size(); i++){
+            children[i]->Update();
+        }
     }
 }
 
