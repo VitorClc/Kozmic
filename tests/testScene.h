@@ -29,7 +29,7 @@ class TestScene : public Scene
             cameraObject = new GameObject();
             cameraObject->transform->position.z = -7;
             cameraObject->transform->position.y = 3;
-            cameraObject->transform->rotation.y = 90;
+            cameraObject->transform->rotation.y = 90;   
             cameraObject->transform->rotation.x = -30;
             Camera* cameraComponent = new Camera(cameraObject->transform);
             cameraObject->AddComponent(cameraComponent);
@@ -48,6 +48,9 @@ class TestScene : public Scene
             GameObject* test = new GameObject();
             test->LoadModel("testScene.obj");
             AddGameObject(test);
+
+            GameObject* test2 = new GameObject();
+            test2->LoadModel("lamp.obj");
         }
 
         void ProcessInputs(InputManager inputManager, double deltaTime){

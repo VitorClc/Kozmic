@@ -42,9 +42,9 @@ void GameObject::Render(Transform* _activeCamera){
     }
 
     //RENDER CHILDREN MESHES
-    for(unsigned int i = 0; i < children.size(); i++){
-        if(children[i]->renderer != NULL){
-            children[i]->renderer->Render(_activeCamera);
+    if(children.size() > 0){
+        for(unsigned int i = 0; i < children.size(); i++){
+            children[i]->Render(_activeCamera);
         }
     }
 }
