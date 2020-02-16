@@ -32,16 +32,17 @@ int main(){
         float deltaTime = (startTime - lastTime) / 1000.0f;
         lastTime = startTime;
 
+		physicsManager->dynamicsWorld->stepSimulation(deltaTime);
+
         window.Clear(0.24, 0.24, 0.24, 1.0);
         window.ProcessInputs();
         
         testScene.ProcessInputs(window.inputManager, deltaTime);
-		testScene.UpdatePhysics(physicsManager->dynamicsWorld);
+
         testScene.Update();
         testScene.Render(testScene.activeCamera->transform);
         
         window.Update();
     }
-
     return 0;
 }

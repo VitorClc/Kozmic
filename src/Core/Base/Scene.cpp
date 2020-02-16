@@ -23,8 +23,10 @@ void Scene::Update(){
 void Scene::Render(Transform* _activeCamera){
     glUniform1i(glGetUniformLocation( shaderManager.GetShader(0), "pointLightCount" ), pointLights.size());
 
-    rootGameObject->Render(_activeCamera);     
-    activeCamera->Update(); 
+    for(unsigned int shader = 0; shader < shaderManager.ShaderAmount(); shader++){
+        rootGameObject->Render(_activeCamera, shaderManager.GetShader(shader));     
+        activeCamera->Update();
+    }
 }
 
 void Scene::AddGameObject(GameObject* _gameObject){

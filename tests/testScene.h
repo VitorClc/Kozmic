@@ -24,14 +24,15 @@ class TestScene : public Scene
 
     public:
         GameObject* light;
+        GameObject* test2;
 
         TestScene(){
             cameraObject = new GameObject();
-            cameraObject->transform->position.z = -7;
-            cameraObject->transform->position.y = 3;
-            cameraObject->transform->rotation.y = 90;   
-            cameraObject->transform->rotation.x = -30;
+
             Camera* cameraComponent = new Camera(cameraObject->transform);
+            cameraObject->transform->position = glm::vec3(10, 5, 0);
+            cameraObject->transform->rotation = glm::vec3(-15, 180, 0);
+
             cameraObject->AddComponent(cameraComponent);
 
             AddCamera(cameraObject);
@@ -49,8 +50,9 @@ class TestScene : public Scene
             test->LoadModel("testScene.obj");
             AddGameObject(test);
 
-            GameObject* test2 = new GameObject();
+            test2 = new GameObject();
             test2->LoadModel("lamp.obj");
+            test2->transform->position = glm::vec3(0, 0.5, 0);
             AddGameObject(test2);
         }
 
@@ -119,5 +121,9 @@ class TestScene : public Scene
             if (inputManager.keyboard.GetKey(SDL_SCANCODE_RCTRL)) {
                 light->transform->position.y -= 1 * movSpeed;
             }
+
+            //std::cout<<"POSITION: "<<cameraObject->transform->position.x<<", "<<cameraObject->transform->position.y<<", "<<cameraObject->transform->position.z<<std::endl;
+            //std::cout<<"ROTATION: "<<cameraObject->transform->rotation.x<<", "<<cameraObject->transform->rotation.y<<", "<<cameraObject->transform->rotation.z<<std::endl;
+
         }
 };

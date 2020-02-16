@@ -18,6 +18,7 @@ LightComponent::LightComponent(Transform* _transform, int _type){
 };
 
 void LightComponent::Update(){    
+    glUseProgram(shaderID);
     switch (type)
     {
         //UPDATE LIGHT DIRECTION IF IS A DIRECTIONAL LIGHT

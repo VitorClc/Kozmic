@@ -39,16 +39,18 @@ void GameObject::Update(){
     }
 }
 
-void GameObject::Render(Transform* _activeCamera){
+void GameObject::Render(Transform* _activeCamera, GLuint _activeShader){
     //IF HAS MESH, RENDER IT
     if(renderer != NULL){
-        renderer->Render(_activeCamera);
+        if(renderer->material.GetShader() == _activeShader){
+            renderer->Render(_activeCamera);
+        }
     }
 
     //RENDER CHILDREN MESHES
     if(children.size() > 0){
         for(unsigned int i = 0; i < children.size(); i++){
-            children[i]->Render(_activeCamera);
+            children[i]->Render(_activeCamera, _activeShader);
         }
     }
 }

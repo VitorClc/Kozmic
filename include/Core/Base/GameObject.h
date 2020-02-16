@@ -28,7 +28,7 @@ class GameObject
 
         void Update();
 
-        void Render(Transform* _activeCamera);
+        void Render(Transform* _activeCamera, GLuint _activeShader);
 
         void SetRenderer(Renderer* _renderer);
 

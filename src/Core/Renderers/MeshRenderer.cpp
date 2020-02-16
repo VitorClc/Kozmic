@@ -51,7 +51,6 @@ void MeshRenderer::Start(){
     glUseProgram(material.GetShader());   
     glUniform1i( glGetUniformLocation( material.GetShader(), "material.diffuseTexture" ),  0 );
     glUniform1i( glGetUniformLocation( material.GetShader(), "material.specularTexture" ),  1 );
-    glUseProgram(0);
 }
 
 void MeshRenderer::Render(Transform* _activeCamera)
