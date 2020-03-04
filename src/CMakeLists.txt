@@ -1,4 +1,4 @@
-set (DEPENDENCIES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/dependencies)
+set (DEPENDENCIES_DIR C:/Users/vitor/Desktop/dependencies) #CHANGE TO THE DEPENDENCIES DIRECTORY
 
 function(CONFIG_DEPENDENCY TARGET DEP_NAME LIBS)
     message("Configuring " ${DEP_NAME})
