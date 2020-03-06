@@ -418,3 +418,4 @@ MigrationBackup/
 .vscode/
 
 build/
+resources/
